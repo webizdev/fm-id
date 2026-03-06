@@ -17,7 +17,7 @@
             <div class="login-logo">FM-ID <span>Admin</span></div>
             <h2>Dashboard Login</h2>
             <form id="login-form">
-                <input type="password" id="admin-pin" placeholder="Masukkan PIN (1234)" required>
+                <input type="password" id="admin-pin" placeholder="Masukkan PIN" required>
                 <button type="submit" class="btn-primary">Masuk</button>
                 <p id="login-error" class="error-msg" style="display:none;">PIN Salah!</p>
             </form>
@@ -37,6 +37,10 @@
                 <li data-view="pengaturan"><i class="fas fa-cog"></i> Pengaturan</li>
                 <li data-view="hero"><i class="fas fa-image"></i> Edit Hero</li>
                 <li data-view="footer"><i class="fas fa-info-circle"></i> Edit Footer</li>
+                <li
+                    style="margin-top:20px; font-size:0.8rem; color:#aaa; text-transform:uppercase; pointer-events:none;">
+                    Blog</li>
+                <li data-view="blog"><i class="fas fa-newspaper"></i> Kelola Artikel Blog</li>
             </ul>
             <button id="logout-btn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Keluar</button>
             <a href="../index.html" class="logout-btn"
@@ -133,6 +137,24 @@
                 </form>
             </div>
 
+            <div id="blog-container" class="settings-container" style="display:none;">
+                <div class="table-container">
+                    <table id="blog-table">
+                        <thead>
+                            <tr>
+                                <th>Judul Artikel</th>
+                                <th>Kategori</th>
+                                <th>Tanggal</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="blog-table-body">
+                            <!-- Blog rows injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <div id="loading-indicator" style="text-align:center; padding: 2rem;">
                 <i class="fas fa-spinner fa-spin fa-2x"></i> Memuat Data...
             </div>
@@ -146,7 +168,7 @@
             <h2 id="modal-title">Edit Data</h2>
             <form id="data-form">
                 <input type="hidden" id="entry-id">
-                <input type="hidden" id="entry-group"> <!-- 'destinations' or 'accommodations' -->
+                <input type="hidden" id="entry-group"> <!-- 'destinations', 'accommodations', or 'blog' -->
 
                 <div class="form-group">
                     <label>Nama Tempat</label>
@@ -176,8 +198,28 @@
                     </select>
                 </div>
 
+                <div class="form-group" id="group-blog-fields" style="display:none;">
+                    <div class="form-group">
+                        <label>Kategori Artikel</label>
+                        <select id="entry-category">
+                            <option value="Tips Travel">Tips Travel</option>
+                            <option value="Destinasi">Destinasi</option>
+                            <option value="Rekomendasi">Rekomendasi</option>
+                            <option value="Kuliner">Kuliner</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Ringkasan Singkat (Excerpt)</label>
+                        <textarea id="entry-excerpt" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Isi Artikel (Copywriting / HTML)</label>
+                        <textarea id="entry-content" rows="10"></textarea>
+                    </div>
+                </div>
+
                 <div class="form-group">
-                    <label>Upload Gambar Baru</label>
+                    <label id="label-image-upload">Upload Gambar Baru</label>
                     <input type="file" id="entry-image-upload" accept="image/*">
                     <small style="display:block; margin-top:0.3rem; color:#6B7280;">Atau gunakan URL/Path yang sudah
                         ada:</small>

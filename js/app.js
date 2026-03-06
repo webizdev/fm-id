@@ -14,6 +14,7 @@ let adminPhone = "6282215197172";
 const navbar = document.getElementById('navbar');
 const destGrid = document.getElementById('destinations-grid');
 const accomGrid = document.getElementById('accommodations-grid');
+const blogGrid = document.getElementById('blog-grid');
 const destFilters = document.getElementById('dest-filters');
 const accomFilters = document.getElementById('accom-filters');
 
@@ -66,8 +67,15 @@ async function fetchData() {
             .from('fmidtour_settings')
             .select('*');
 
-        if (destError || accomError || settingsError) {
-            console.error('Supabase fetch error:', destError || accomError || settingsError);
+        // Fetch latest 3 blogs
+        const { data: blogData, error: blogError } = await _supabase
+            .from('fmidtour_blog')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(3);
+
+        if (destError || accomError || settingsError || blogError) {
+            console.error('Supabase fetch error:', destError || accomError || settingsError || blogError);
             showError(destGrid, "Gagal memuat destinasi.");
             showError(accomGrid, "Gagal memuat akomodasi.");
             return;
@@ -80,11 +88,13 @@ async function fetchData() {
         applySettingsToDOM();
         renderGrid(allDestinations, destGrid, 'destination');
         renderGrid(allAccommodations, accomGrid, 'accommodation');
+        renderBlogGrid(blogData || []);
 
     } catch (error) {
         console.error('Error fetching data from Supabase:', error);
         showError(destGrid, "Gagal memuat destinasi. Pastikan koneksi internet stabil.");
         showError(accomGrid, "Gagal memuat akomodasi.");
+        showError(blogGrid, "Gagal memuat artikel blog.");
     }
 }
 
@@ -188,6 +198,35 @@ function renderGrid(data, container, type) {
             </div>
         `;
         container.insertAdjacentHTML('beforeend', cardHTML);
+    });
+}
+
+function renderBlogGrid(data) {
+    if (!blogGrid) return;
+    blogGrid.innerHTML = '';
+
+    if (data.length === 0) {
+        blogGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #6B7280;">Belum ada artikel yang diterbitkan.</div>`;
+        return;
+    }
+
+    data.forEach(item => {
+        const date = new Date(item.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        const cardHTML = `
+            <div class="travel-card fade-in">
+                <div class="card-img-wrapper">
+                    <div class="card-badge" style="background: var(--color-primary);">${item.category}</div>
+                    <img src="${item.image}" alt="${item.title}" onerror="this.src='https://via.placeholder.com/400x300?text=Blog+Image'">
+                </div>
+                <div class="card-body">
+                    <small style="color: var(--color-primary); font-weight: 500;">${date}</small>
+                    <h3 style="margin-top: 0.5rem; line-height: 1.3;">${item.title}</h3>
+                    <p style="font-size: 0.9rem; color: #6B7280; margin: 0.5rem 0 1.5rem;">${item.excerpt}</p>
+                    <a href="blog-detail.html?slug=${item.slug}" class="btn-text">Baca Selengkapnya <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        `;
+        blogGrid.insertAdjacentHTML('beforeend', cardHTML);
     });
 }
 

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artikel | FM-ID Tour&Travel</title>
+    <meta name="description" content="Baca artikel selengkapnya di FM-ID Tour&Travel.">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .article-hero {
+            position: relative;
+            height: 60vh;
+            min-height: 400px;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            padding-bottom: 4rem;
+        }
+
+        .article-hero img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .article-hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70%;
+            background: linear-gradient(transparent, rgba(10, 31, 46, 0.9));
+            z-index: -1;
+        }
+
+        .article-content-wrapper {
+            max-width: 800px;
+            margin: -4rem auto 5rem;
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .article-header {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .article-meta {
+            color: var(--color-primary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .article-body {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            color: #374151;
+        }
+
+        .article-body p {
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .article-content-wrapper {
+                margin: -2rem 1rem 3rem;
+                padding: 1.5rem;
+            }
+
+            .article-hero {
+                height: 40vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar" id="navbar" style="background: rgba(10, 31, 46, 0.95);">
+        <div class="logo">
+            <a href="index.html">FM-ID <span>Tour&Travel</span></a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html#destinations">Tamasya</a></li>
+            <li><a href="index.html#accommodations">Hotel & Villa</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="index.html#flights">Tiket Pesawat</a></li>
+            <li><a href="index.html#contact" class="btn-nav-contact">Hubungi Kami</a></li>
+        </ul>
+        <div class="burger" id="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <div id="article-container">
+        <header class="article-hero">
+            <img src="" alt="" id="article-hero-img">
+            <div class="container" style="padding: 0 2rem; width: 100%;">
+                <h1 id="article-title" style="color: white; font-size: 3rem; line-height: 1.2; max-width: 900px;"></h1>
+            </div>
+        </header>
+
+        <article class="article-content-wrapper">
+            <div class="article-header">
+                <span id="article-meta" class="article-meta"></span>
+            </div>
+            <div id="article-content" class="article-body">
+                <!-- Content injected here -->
+            </div>
+            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #eee;">
+                <a href="blog.html" class="btn-secondary"><i class="fas fa-arrow-left"></i> Kembali ke Blog</a>
+            </div>
+        </article>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h2 class="logo">FM-ID <span>Tour&Travel</span></h2>
+                <p>Spesialis penyedia pengalaman liburan premium dan terpercaya untuk area Jakarta, Bandung, Puncak, dan
+                    Bali.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Hubungi Kami</h3>
+                <p><i class="fab fa-whatsapp"></i> 082215197172</p>
+                <p><i class="fas fa-map-marker-alt"></i> Puncak, Bandung, Bali, Indonesia</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 FM-ID Tour&Travel. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/blog.js"></script>
+</body>
+
+</html>

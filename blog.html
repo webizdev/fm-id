@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog & Article | FM-ID Tour&Travel</title>
+    <meta name="description" content="Tips perjalanan, rekomendasi destinasi, dan cerita seru dari FM-ID Tour&Travel.">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="logo">
+            <a href="index.html">FM-ID <span>Tour&Travel</span></a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html#destinations">Tamasya</a></li>
+            <li><a href="index.html#accommodations">Hotel & Villa</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="index.html#flights">Tiket Pesawat</a></li>
+            <li><a href="index.html#contact" class="btn-nav-contact">Hubungi Kami</a></li>
+        </ul>
+        <div class="burger" id="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <header class="hero-page"
+        style="background: linear-gradient(rgba(10, 31, 46, 0.7), rgba(10, 31, 46, 0.7)), url('https://images.unsplash.com/photo-1506929113614-b9b6773530f2?auto=format&fit=crop&q=80&w=1920'); background-size: cover; background-position: center; padding: 10rem 2rem 6rem; text-align: center; color: white;">
+        <h1 style="font-size: 3rem; margin-bottom: 1rem;">Blog & Article</h1>
+        <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto; opacity: 0.9;">Inspirasi liburan dan tips menarik
+            untuk pengalaman perjalanan terbaik Anda.</p>
+    </header>
+
+    <section style="padding: 5rem 2rem;">
+        <div class="grid-container" id="blog-page-grid">
+            <!-- Blog cards injected here -->
+            <div style="text-align:center; width:100%; grid-column: 1/-1;">
+                <i class="fas fa-spinner fa-spin fa-3x" style="color:var(--color-primary);"></i>
+                <p style="margin-top:1rem;">Memuat semua artikel...</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h2 class="logo">FM-ID <span>Tour&Travel</span></h2>
+                <p>Spesialis penyedia pengalaman liburan premium dan terpercaya untuk area Jakarta, Bandung, Puncak, dan
+                    Bali.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Tautan Cepat</h3>
+                <ul>
+                    <li><a href="index.html#destinations">Destinasi</a></li>
+                    <li><a href="index.html#accommodations">Akomodasi</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="index.html#flights">Tiket Pesawat</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Hubungi Kami</h3>
+                <p><i class="fab fa-whatsapp"></i> 082215197172</p>
+                <p><i class="fas fa-map-marker-alt"></i> Puncak, Bandung, Bali, Indonesia</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 FM-ID Tour&Travel. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/blog.js"></script>
+</body>
+
+</html>
