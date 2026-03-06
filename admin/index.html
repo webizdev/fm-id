@@ -205,11 +205,17 @@
                 </div>
 
                 <div class="form-group" id="group-type" style="display:none;">
-                    <label>Tipe Akomodasi</label>
-                    <select id="entry-type">
-                        <option value="Hotel">Hotel</option>
-                        <option value="Villa">Villa</option>
-                    </select>
+                    <label id="label-type">Tipe / Kategori</label>
+                    <input type="text" id="entry-type" list="type-suggestions"
+                        placeholder="Contoh: Hotel, Alam, Keluarga, dll">
+                    <datalist id="type-suggestions">
+                        <option value="Hotel">
+                        <option value="Villa">
+                        <option value="Alam">
+                        <option value="Keluarga">
+                        <option value="Religi">
+                        <option value="Kuliner">
+                    </datalist>
                 </div>
 
                 <div class="form-group" id="group-blog-fields" style="display:none;">

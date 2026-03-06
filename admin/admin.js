@@ -90,7 +90,16 @@ window.openEditModal = function (id, targetGroup = null) {
         const isArea = group === 'areas';
         const isBlog = group === 'blog';
 
-        if (groupType) groupType.style.display = group === 'accommodations' ? 'block' : 'none';
+        const isAccom = group === 'accommodations';
+        const isDest = group === 'destinations';
+
+        if (groupType) {
+            groupType.style.display = (isAccom || isDest) ? 'block' : 'none';
+            const typeLabel = getEl('label-type');
+            if (typeLabel) {
+                typeLabel.innerText = isAccom ? 'Tipe Akomodasi' : 'Kategori Wisata';
+            }
+        }
         if (groupBlog) groupBlog.style.display = isBlog ? 'block' : 'none';
         if (pField) pField.style.display = (isBlog || isArea) ? 'none' : 'block';
         if (aField) aField.style.display = (isBlog || isArea) ? 'none' : 'block';
@@ -370,7 +379,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 areaInput.closest('.form-group').style.display = (isBlog || isArea) ? 'none' : 'block';
                 areaInput.required = !(isBlog || isArea);
             }
-            if (getEl('group-type')) getEl('group-type').style.display = activeView === 'accommodations' ? 'block' : 'none';
+            const isAccom = activeView === 'accommodations';
+            const isDest = activeView === 'destinations';
+
+            if (getEl('group-type')) {
+                const gt = getEl('group-type');
+                gt.style.display = (isAccom || isDest) ? 'block' : 'none';
+                const typeLabel = getEl('label-type');
+                if (typeLabel) {
+                    typeLabel.innerText = isAccom ? 'Tipe Akomodasi' : 'Kategori Wisata';
+                }
+            }
             if (getEl('group-blog-fields')) getEl('group-blog-fields').style.display = isBlog ? 'block' : 'none';
             if (imageInput) {
                 imageInput.closest('.form-group').style.display = isArea ? 'none' : 'block';
@@ -424,7 +443,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     payload = { name: getEl('entry-name').value };
                 } else {
                     payload = { name: getEl('entry-name').value, area: getEl('entry-area').value, price: parseInt(getEl('entry-price').value), image: url };
-                    if (group === 'accommodations') payload.type = getEl('entry-type').value;
+                    if (group === 'accommodations' || group === 'destinations') {
+                        payload.type = getEl('entry-type').value;
+                    }
                 }
 
                 const tableMap = { 'destinations': 'fmidtour_destinasi', 'accommodations': 'fmidtour_akomodasi', 'blog': 'fmidtour_blog', 'areas': 'fmidtour_areas' };
