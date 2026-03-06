@@ -187,9 +187,16 @@
                 <input type="hidden" id="entry-id">
                 <input type="hidden" id="entry-group"> <!-- 'destinations', 'accommodations', or 'blog' -->
 
-                <div class="form-group">
+                <div class="form-group" id="group-name">
                     <label for="entry-name">Nama Tempat</label>
-                    <input type="text" id="entry-name" required>
+                    <input type="text" id="entry-name" required placeholder="Contoh: Curug Citambur">
+                    <!-- Translations -->
+                    <div class="translation-fields">
+                        <input type="text" id="entry-name-en" placeholder="Name in English (Optional)"
+                            style="margin-top: 5px;">
+                        <input type="text" id="entry-name-ar" placeholder="الاسم بالعربية (اختياري)"
+                            style="margin-top: 5px; text-align: right;" dir="rtl">
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -208,6 +215,13 @@
                     <label id="label-type">Tipe / Kategori</label>
                     <input type="text" id="entry-type" list="type-suggestions"
                         placeholder="Contoh: Hotel, Alam, Keluarga, dll">
+                    <!-- Translations -->
+                    <div class="translation-fields">
+                        <input type="text" id="entry-type-en" placeholder="Category in English (Optional)"
+                            style="margin-top: 5px;">
+                        <input type="text" id="entry-type-ar" placeholder="الفئة بالعربية (اختياري)"
+                            style="margin-top: 5px; text-align: right;" dir="rtl">
+                    </div>
                     <datalist id="type-suggestions">
                         <option value="Hotel">
                         <option value="Villa">

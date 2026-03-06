@@ -180,6 +180,87 @@ section {
   color: white;
 }
 
+/* Language Switcher Styling */
+.lang-select {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
+  color: white;
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  cursor: pointer;
+  outline: none;
+  transition: var(--transition);
+}
+
+.navbar.scrolled .lang-select {
+  color: white;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.lang-select option {
+  background: var(--color-primary);
+  color: white;
+}
+
+/* ================== RTL SUPPORT ================== */
+body.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl .nav-links {
+  margin-right: auto;
+  margin-left: initial;
+}
+
+.rtl .logo {
+  margin-left: 2rem;
+  margin-right: 0;
+}
+
+.rtl .input-icon {
+  margin-right: 0;
+  margin-left: 0.8rem;
+}
+
+.rtl .btn-search-pill {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+.rtl .trip-trigger {
+  right: auto;
+  left: 2rem;
+}
+
+.rtl .trip-drawer {
+  right: auto;
+  left: -400px;
+}
+
+.rtl .trip-drawer.open {
+  right: auto;
+  left: 0;
+}
+
+.rtl .footer-col p i {
+  margin-right: 0;
+  margin-left: 0.8rem;
+}
+
+@media (max-width: 768px) {
+  .rtl .nav-links {
+    right: auto;
+    left: -100%;
+  }
+
+  .rtl .nav-links.active {
+    left: 0;
+  }
+}
+
 /* ================== HERO SECTION ================== */
 .hero {
   height: 100vh;

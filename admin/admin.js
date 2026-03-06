@@ -65,15 +65,29 @@ window.openEditModal = function (id, targetGroup = null) {
         getEl('entry-id').value = item.id || '';
         getEl('entry-group').value = group || '';
         getEl('entry-name').value = item.name || item.title || '';
+        getEl('entry-name-en').value = item.name_en || item.title_en || '';
+        getEl('entry-name-ar').value = item.name_ar || item.title_ar || '';
+
         getEl('entry-area').value = item.area || 'Jakarta';
         getEl('entry-price').value = item.price !== undefined ? item.price : '0';
         getEl('entry-image').value = item.image || '';
-        getEl('entry-type').value = item.type || 'Hotel';
+
+        getEl('entry-type').value = item.type || '';
+        getEl('entry-type-en').value = item.type_en || '';
+        getEl('entry-type-ar').value = item.type_ar || '';
 
         if (group === 'blog') {
             getEl('entry-category').value = item.category || 'Tips Travel';
+            getEl('entry-category-en').value = item.category_en || '';
+            getEl('entry-category-ar').value = item.category_ar || '';
+
             getEl('entry-excerpt').value = item.excerpt || '';
+            getEl('entry-excerpt-en').value = item.excerpt_en || '';
+            getEl('entry-excerpt-ar').value = item.excerpt_ar || '';
+
             getEl('entry-content').value = item.content || '';
+            getEl('entry-content-en').value = item.content_en || '';
+            getEl('entry-content-ar').value = item.content_ar || '';
         }
 
         // --- DYNAMIC VISIBILITY & REQUIRED FLAGS ---
@@ -438,13 +452,41 @@ document.addEventListener('DOMContentLoaded', () => {
                 let payload = {};
                 if (group === 'blog') {
                     const title = getEl('entry-name').value;
-                    payload = { title, slug: title.toLowerCase().replace(/ /g, '-'), category: getEl('entry-category').value, excerpt: getEl('entry-excerpt').value, content: getEl('entry-content').value, image: url };
+                    payload = {
+                        title,
+                        slug: title.toLowerCase().replace(/ /g, '-'),
+                        category: getEl('entry-category').value,
+                        category_en: getEl('entry-category-en').value,
+                        category_ar: getEl('entry-category-ar').value,
+                        excerpt: getEl('entry-excerpt').value,
+                        excerpt_en: getEl('entry-excerpt-en').value,
+                        excerpt_ar: getEl('entry-excerpt-ar').value,
+                        content: getEl('entry-content').value,
+                        content_en: getEl('entry-content-en').value,
+                        content_ar: getEl('entry-content-ar').value,
+                        title_en: getEl('entry-name-en').value,
+                        title_ar: getEl('entry-name-ar').value,
+                        image: url
+                    };
                 } else if (group === 'areas') {
-                    payload = { name: getEl('entry-name').value };
+                    payload = {
+                        name: getEl('entry-name').value,
+                        name_en: getEl('entry-name-en').value,
+                        name_ar: getEl('entry-name-ar').value
+                    };
                 } else {
-                    payload = { name: getEl('entry-name').value, area: getEl('entry-area').value, price: parseInt(getEl('entry-price').value), image: url };
+                    payload = {
+                        name: getEl('entry-name').value,
+                        name_en: getEl('entry-name-en').value,
+                        name_ar: getEl('entry-name-ar').value,
+                        area: getEl('entry-area').value,
+                        price: parseInt(getEl('entry-price').value),
+                        image: url
+                    };
                     if (group === 'accommodations' || group === 'destinations') {
                         payload.type = getEl('entry-type').value;
+                        payload.type_en = getEl('entry-type-en').value;
+                        payload.type_ar = getEl('entry-type-ar').value;
                     }
                 }
 

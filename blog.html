@@ -19,11 +19,19 @@
             <a href="index.html">FM-ID <span>Tour&Travel</span></a>
         </div>
         <ul class="nav-links">
-            <li><a href="index.html#destinations">Tamasya</a></li>
-            <li><a href="index.html#accommodations">Hotel & Villa</a></li>
-            <li><a href="blog.html">Blog</a></li>
-            <li><a href="index.html#flights">Tiket Pesawat</a></li>
-            <li><a href="index.html#contact" class="btn-nav-contact" id="dyn-nav-contact">Hubungi Kami</a></li>
+            <li><a href="index.html#destinations" data-i18n="nav_tamasya">Tamasya</a></li>
+            <li><a href="index.html#accommodations" data-i18n="nav_accommodations">Hotel & Villa</a></li>
+            <li><a href="index.html#blog" data-i18n="nav_blog">Blog</a></li>
+            <li><a href="index.html#flights" data-i18n="nav_flights">Tiket Pesawat</a></li>
+            <li>
+                <select id="lang-switch" class="lang-select">
+                    <option value="id">🇮🇩 ID</option>
+                    <option value="en">🇺🇸 EN</option>
+                    <option value="ar">🇸🇦 AR</option>
+                </select>
+            </li>
+            <li><a href="#contact" class="btn-nav-contact" id="dyn-nav-contact" data-i18n="nav_contact">Hubungi Kami</a>
+            </li>
         </ul>
         <div class="burger" id="burger">
             <div class="line1"></div>
@@ -37,9 +45,10 @@
             alt="Blog Hero" class="hero-bg">
         <div class="hero-overlay"></div>
         <div class="hero-content-clean">
-            <div class="hero-badge"><i class="fas fa-sparkles"></i> Insights & Inspiration</div>
-            <h1>Blog & <span>Article</span></h1>
-            <p>Tips perjalanan, rekomendasi destinasi, dan cerita seru dari FM-ID Tour&Travel.</p>
+            <div class="title-section">
+                <h2 data-i18n="section_blog">Blog & Artikel</h2>
+                <p data-i18n="section_blog_desc">Inspirasi perjalanan dan kabar terbaru dari FM-ID Tour&Travel.</p>
+            </div>
         </div>
     </header>
 
@@ -57,31 +66,32 @@
         <div class="footer-content">
             <div class="footer-col">
                 <h2 class="logo">FM-ID <span>Tour&Travel</span></h2>
-                <p>Spesialis penyedia pengalaman liburan premium dan terpercaya untuk area Jakarta, Bandung, Puncak, dan
+                <p data-i18n="footer_desc">Spesialis penyedia pengalaman liburan premium dan terpercaya untuk area
+                    Jakarta, Bandung, Puncak, dan
                     Bali.</p>
             </div>
             <div class="footer-col">
-                <h3>Tautan Cepat</h3>
-                <ul>
-                    <li><a href="index.html#destinations">Destinasi</a></li>
-                    <li><a href="index.html#accommodations">Akomodasi</a></li>
-                    <li><a href="blog.html">Blog</a></li>
-                    <li><a href="index.html#flights">Tiket Pesawat</a></li>
-                </ul>
+                <h4 data-i18n="footer_nav">Navigasi</h4>
+                <a href="index.html#destinations" data-i18n="nav_tamasya">Destinasi Thamrin</a>
+                <a href="index.html#accommodations" data-i18n="nav_accommodations">Hotel & Villa</a>
+                <a href="blog.html" data-i18n="nav_blog">Blog</a>
+                <a href="index.html#flights" data-i18n="nav_flights">Tiket Pesawat</a>
             </div>
             <div class="footer-col">
-                <h3>Hubungi Kami</h3>
-                <p><i class="fab fa-whatsapp"></i> 082215197172</p>
-                <p><i class="fas fa-map-marker-alt"></i> Puncak, Bandung, Bali, Indonesia</p>
+                <h4 data-i18n="footer_cs">Layanan Pelanggan</h4>
+                <p><i class="fab fa-whatsapp"></i> <span id="dyn-footer-wa">+62 822-1519-7172</span></p>
+                <p><i class="fas fa-map-marker-alt"></i> <span id="dyn-footer-address">Puncak, Bandung, Bali,
+                        Indonesia</span></p>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 FM-ID Tour&Travel. All Rights Reserved.</p>
+            <p data-i18n="footer_copyright">&copy; 2026 FM-ID Tour&Travel. All Rights Reserved.</p>
         </div>
     </footer>
 
-    <!-- Supabase JS -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/translations.js"></script>
     <script src="js/blog.js"></script>
 </body>
 

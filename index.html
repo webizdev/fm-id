@@ -21,11 +21,19 @@
             <i class="fas fa-bars"></i>
         </div>
         <ul class="nav-links" id="nav-links">
-            <li><a href="#destinations">Tamasya</a></li>
-            <li><a href="#accommodations">Hotel & Villa</a></li>
-            <li><a href="#blog">Blog</a></li>
-            <li><a href="#flights">Tiket Pesawat</a></li>
-            <li><a href="#contact" class="btn-nav-contact" id="dyn-nav-contact">Hubungi Kami</a></li>
+            <li><a href="#destinations" data-i18n="nav_tamasya">Tamasya</a></li>
+            <li><a href="#accommodations" data-i18n="nav_accommodations">Hotel & Villa</a></li>
+            <li><a href="#blog" data-i18n="nav_blog">Blog</a></li>
+            <li><a href="#flights" data-i18n="nav_flights">Tiket Pesawat</a></li>
+            <li>
+                <select id="lang-switch" class="lang-select">
+                    <option value="id">🇮🇩 ID</option>
+                    <option value="en">🇺🇸 EN</option>
+                    <option value="ar">🇸🇦 AR</option>
+                </select>
+            </li>
+            <li><a href="#contact" class="btn-nav-contact" id="dyn-nav-contact" data-i18n="nav_contact">Hubungi Kami</a>
+            </li>
         </ul>
     </nav>
 
@@ -35,9 +43,11 @@
         <img src="assets/images/hero.png" alt="Tropical Beach Resort Bali" class="hero-bg" id="dyn-hero-bg">
         <div class="hero-overlay"></div>
         <div class="hero-content-clean">
-            <div class="hero-badge" id="dyn-hero-badge"><i class="fas fa-sparkles"></i> EXPERT TOUR & TRAVEL</div>
-            <h1 id="dyn-hero-title">Jelajahi Momen</h1>
-            <p id="dyn-hero-subtitle">Spesialis tamasya area Puncak, Bandung, Bali. Tersedia sewa Hotel, Villa
+            <div class="hero-badge" id="dyn-hero-badge" data-i18n="hero_badge"><i class="fas fa-sparkles"></i> EXPERT
+                TOUR & TRAVEL</div>
+            <h1 id="dyn-hero-title" data-i18n="hero_title">Jelajahi Momen</h1>
+            <p id="dyn-hero-subtitle" data-i18n="hero_subtitle">Spesialis tamasya area Puncak, Bandung, Bali. Tersedia
+                sewa Hotel, Villa
                 eksklusif, dan Tiket Pesawat
                 untuk liburan impian Anda.</p>
 
@@ -45,12 +55,13 @@
                 <form id="hero-search-form">
                     <div class="search-input-inline">
                         <i class="fas fa-user input-icon"></i>
-                        <input type="text" id="search-name" placeholder="Nama Anda" required>
+                        <input type="text" id="search-name" placeholder="Nama Anda" data-i18n="search_name" required>
                     </div>
                     <div class="search-divider"></div>
                     <div class="search-input-inline">
                         <i class="fas fa-map-marker-alt input-icon"></i>
-                        <input type="text" id="search-dest" placeholder="Mau ke mana?" list="area-suggestions" required>
+                        <input type="text" id="search-dest" placeholder="Mau ke mana?" data-i18n="search_dest"
+                            list="area-suggestions" required>
                         <datalist id="area-suggestions">
                             <!-- Options injected by JS -->
                         </datalist>
@@ -60,7 +71,8 @@
                         <i class="fas fa-calendar-alt input-icon"></i>
                         <input type="date" id="search-date" required>
                     </div>
-                    <button type="submit" class="btn-search-pill"><i class="fab fa-whatsapp"></i> Tiket</button>
+                    <button type="submit" class="btn-search-pill"><i class="fab fa-whatsapp"></i> <span
+                            data-i18n="btn_search">Tiket</span></button>
                 </form>
             </div>
         </div>
@@ -69,8 +81,8 @@
     <!-- Destinasi Wisata -->
     <section id="destinations">
         <div class="title-section">
-            <h2>Destinasi Tamasya</h2>
-            <p>Pilih petualangan terbaik di berbagai kota unggulan kami.</p>
+            <h2 data-i18n="section_destinations">Destinasi Tamasya</h2>
+            <p data-i18n="section_destinations_desc">Pilih petualangan terbaik di berbagai kota unggulan kami.</p>
         </div>
 
         <div class="filter-container" id="dest-filters">
@@ -90,8 +102,9 @@
     <!-- Akomodasi -->
     <section id="accommodations">
         <div class="title-section">
-            <h2>Hotel & Villa Pilihan</h2>
-            <p>Istirahat di tempat paling nyaman, dari hotel mewah hingga villa eksklusif.</p>
+            <h2 data-i18n="section_accommodations">Hotel & Villa Pilihan</h2>
+            <p data-i18n="section_accommodations_desc">Istirahat di tempat paling nyaman, dari hotel mewah hingga villa
+                eksklusif.</p>
         </div>
 
         <div class="filter-container" id="accom-filters">
@@ -137,8 +150,9 @@
                         <input type="number" id="flight-pax" min="1" max="10" value="1" required>
                     </div>
                 </div>
-                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;">Cari & Pesan via
-                    WhatsApp <i class="fab fa-whatsapp"></i></button>
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;"><span
+                        data-i18n="btn_flight_search">Cari & Pesan via
+                        WhatsApp</span> <i class="fab fa-whatsapp"></i></button>
             </form>
         </div>
     </section>
@@ -146,8 +160,9 @@
     <!-- Blog Section -->
     <section id="blog">
         <div class="title-section">
-            <h2>Blog & Article</h2>
-            <p>Tips perjalanan, rekomendasi destinasi, dan cerita seru dari FM-ID Tour&Travel.</p>
+            <h2 data-i18n="section_blog">Blog & Article</h2>
+            <p data-i18n="section_blog_desc">Tips perjalanan, rekomendasi destinasi, dan cerita seru dari FM-ID
+                Tour&Travel.</p>
         </div>
         <div class="grid-container" id="blog-grid">
             <!-- Blog cards injected here -->
@@ -168,19 +183,19 @@
                     Bali.</p>
             </div>
             <div class="footer-col">
-                <h4>Navigasi</h4>
-                <a href="#destinations">Destinasi Thamrin</a>
-                <a href="#accommodations">Hotel & Villa</a>
-                <a href="#flights">Tiket Pesawat</a>
+                <h4 data-i18n="footer_nav">Navigasi</h4>
+                <a href="#destinations" data-i18n="nav_tamasya">Destinasi Thamrin</a>
+                <a href="#accommodations" data-i18n="nav_accommodations">Hotel & Villa</a>
+                <a href="#flights" data-i18n="nav_flights">Tiket Pesawat</a>
             </div>
             <div class="footer-col">
-                <h4>Layanan Pelanggan</h4>
+                <h4 data-i18n="footer_cs">Layanan Pelanggan</h4>
                 <p><i class="fab fa-whatsapp"></i> <span id="dyn-footer-wa">+62 822-1519-7172</span></p>
                 <p><i class="fas fa-map-marker-alt"></i> <span id="dyn-footer-address">JL.Hanjawar pacet, Cipanas Puncak
                         kota Bunga no 40</span></p>
             </div>
             <div class="footer-col" id="dyn-footer-maps-wrapper">
-                <h4>Temukan Kami</h4>
+                <h4 data-i18n="footer_find_us">Temukan Kami</h4>
                 <div class="maps-container" id="dyn-footer-maps"
                     style="border-radius:12px; overflow:hidden; border: 2px solid rgba(255,255,255,0.1);">
                     <iframe
@@ -205,7 +220,7 @@
 
     <div id="trip-drawer" class="trip-drawer">
         <div class="drawer-header">
-            <h3>Rencana Trip Anda <i class="fas fa-suitcase-rolling"></i></h3>
+            <h3><span data-i18n="trip_plan_title">Rencana Trip Anda</span> <i class="fas fa-suitcase-rolling"></i></h3>
             <button id="close-drawer" class="close-btn"><i class="fas fa-times"></i></button>
         </div>
         <div class="drawer-body" id="trip-items-container">
@@ -221,6 +236,7 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/translations.js"></script>
     <script src="js/app.js"></script>
 </body>
 

@@ -34,7 +34,11 @@ const heroSearchForm = document.getElementById('hero-search-form');
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
-    fetchData();
+    // --- Language Change Support ---
+    window.addEventListener('langChanged', () => {
+        fetchData(); // Re-fetch or re-render
+        updateTripUI(); // Update drawer text
+    });
     setupEventListeners();
     loadTripPlanFromStorage();
 });
@@ -202,10 +206,13 @@ function populateAreasUI() {
         if (allBtn) container.appendChild(allBtn);
 
         allAreas.forEach(area => {
+            const lang = localStorage.getItem('fm_lang') || 'id';
+            const areaNameTranslated = lang === 'en' ? (area.name_en || area.name) : (lang === 'ar' ? (area.name_ar || area.name) : area.name);
+
             const btn = document.createElement('button');
             btn.className = 'filter-btn';
             btn.setAttribute('data-filter', area.name);
-            btn.innerText = area.name;
+            btn.innerText = areaNameTranslated;
             container.appendChild(btn);
         });
     };
@@ -231,21 +238,30 @@ function renderGrid(data, container, type, limit = null) {
     const displayData = limit ? data.slice(0, limit) : data;
 
     displayData.forEach(item => {
-        const typeBadge = type === 'accommodation' ? `<div class="card-badge"><i class="fas fa-bed"></i> ${item.type}</div>` : '';
+        const lang = localStorage.getItem('fm_lang') || 'id';
         const isAdded = tripPlan.some(t => t.id === item.id);
-        const btnText = isAdded ? "Hapus dari Trip Plan" : "Tambah ke Trip Plan";
+        const name = lang === 'en' ? (item.name_en || item.name) : (lang === 'ar' ? (item.name_ar || item.name) : item.name);
+        const itemTypeTranslated = lang === 'en' ? (item.type_en || item.type) : (lang === 'ar' ? (item.type_ar || item.type) : item.type);
+
+        // Find area name translation
+        const areaData = allAreas.find(a => a.name === item.area);
+        const areaTranslated = areaData ? (lang === 'en' ? (areaData.name_en || areaData.name) : (lang === 'ar' ? (areaData.name_ar || areaData.name) : areaData.name)) : item.area;
+
+        const btnText = translations[lang] ? (isAdded ? translations[lang].btn_remove_trip : translations[lang].btn_add_trip) : (isAdded ? "Hapus" : "Tambah");
         const btnClass = isAdded ? "btn-add-trip active" : "btn-add-trip";
         const btnStyle = isAdded ? "background: var(--color-primary); color: white;" : "";
+
+        const typeBadge = type === 'accommodation' ? `<div class="card-badge" style="z-index: 2;"><i class="fas fa-bed"></i> ${itemTypeTranslated}</div>` : '';
 
         const cardHTML = `
             <div class="travel-card fade-in">
                 <div class="card-img-wrapper">
                     ${typeBadge}
-                    <div class="card-badge" style="${type === 'accommodation' ? 'right: 1rem; left: auto;' : 'left: 1rem;'}; background: rgba(0,0,0,0.6); border: none;"><i class="fas fa-map-marker-alt"></i> ${item.area}</div>
-                    <img src="${item.image}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/400x300?text=Gambar+Tidak+Tersedia'">
+                    <div class="card-badge" style="${type === 'accommodation' ? 'right: 1rem; left: auto;' : 'left: 1rem;'}; background: rgba(0,0,0,0.6); border: none; z-index: 2;"><i class="fas fa-map-marker-alt"></i> ${areaTranslated}</div>
+                    <img src="${item.image}" alt="${name}" onerror="this.src='https://via.placeholder.com/400x300?text=Gambar+Tidak+Tersedia'">
                 </div>
                 <div class="card-body">
-                    <h3>${item.name}</h3>
+                    <h3>${name}</h3>
                     <div class="card-price">${formatRupiah(item.price)}</div>
                     <button class="${btnClass}" style="${btnStyle}" onclick="toggleTripItem('${item.id}', '${type}')" id="btn-${item.id}">
                         ${btnText}
@@ -285,18 +301,24 @@ function renderBlogGrid(data) {
     const displayData = data.slice(0, 5);
 
     displayData.forEach(item => {
+        const lang = localStorage.getItem('fm_lang') || 'id';
+        const title = lang === 'en' ? (item.title_en || item.title) : (lang === 'ar' ? (item.title_ar || item.title) : item.title);
+        const excerpt = lang === 'en' ? (item.excerpt_en || item.excerpt) : (lang === 'ar' ? (item.excerpt_ar || item.excerpt) : item.excerpt);
+        const category = lang === 'en' ? (item.category_en || item.category) : (lang === 'ar' ? (item.category_ar || item.category) : item.category);
+        const btnReadMore = translations[lang] ? translations[lang].btn_read_more : "Baca Selengkapnya";
+
         const date = new Date(item.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
         const cardHTML = `
             <div class="travel-card fade-in">
                 <div class="card-img-wrapper">
-                    <div class="card-badge" style="background: var(--color-primary);">${item.category}</div>
-                    <img src="${item.image}" alt="${item.title}" onerror="this.src='https://via.placeholder.com/400x300?text=Blog+Image'">
+                    <div class="card-badge" style="background: var(--color-primary);">${category}</div>
+                    <img src="${item.image}" alt="${title}" onerror="this.src='https://via.placeholder.com/400x300?text=Blog+Image'">
                 </div>
                 <div class="card-body">
                     <small style="color: var(--color-primary); font-weight: 500;">${date}</small>
-                    <h3 style="margin-top: 0.5rem; line-height: 1.3;">${item.title}</h3>
-                    <p style="font-size: 0.9rem; color: #6B7280; margin: 0.5rem 0 1.5rem;">${item.excerpt}</p>
-                    <a href="blog-detail.html?slug=${item.slug}" class="btn-text">Baca Selengkapnya <i class="fas fa-arrow-right"></i></a>
+                    <h3 style="margin-top: 0.5rem; line-height: 1.3;">${title}</h3>
+                    <p style="font-size: 0.9rem; color: #6B7280; margin: 0.5rem 0 1.5rem;">${excerpt}</p>
+                    <a href="blog-detail.html?slug=${item.slug}" class="btn-text">${btnReadMore} <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
         `;
@@ -392,16 +414,20 @@ function toggleTripItem(id, type) {
     // Update button in grid if visible
     const btn = document.getElementById(`btn-${id}`);
     if (btn) {
+        const lang = localStorage.getItem('fm_lang') || 'id';
+        const btnAdd = translations[lang] ? translations[lang].btn_add_trip : "Tambah ke Trip Plan";
+        const btnRemove = translations[lang] ? translations[lang].btn_remove_trip : "Hapus dari Trip Plan";
+
         if (!isAdded) {
             btn.classList.add('active');
             btn.style.background = 'var(--color-primary)';
             btn.style.color = 'white';
-            btn.innerText = 'Hapus dari Trip Plan';
+            btn.innerText = btnRemove;
         } else {
             btn.classList.remove('active');
             btn.style.background = 'transparent';
             btn.style.color = 'var(--color-primary)';
-            btn.innerText = 'Tambah ke Trip Plan';
+            btn.innerText = btnAdd;
         }
     }
 }
@@ -415,23 +441,32 @@ function updateTripUI() {
     setTimeout(() => { tripBadge.style.transform = 'scale(1)'; }, 200);
 
     // Update Drawer
+    const lang = localStorage.getItem('fm_lang') || 'id';
+    tripItemsContainer.innerHTML = '';
+
     if (tripPlan.length === 0) {
-        tripItemsContainer.innerHTML = '<div class="empty-state">Belum ada destinasi atau akomodasi yang dipilih. Mari mulai eksplorasi!</div>';
+        const emptyMsg = translations[lang] ? translations[lang].trip_plan_empty : "Belum ada rencana trip.";
+        tripItemsContainer.innerHTML = `<div class="empty-state">${emptyMsg}</div>`;
         checkoutBtn.style.display = 'none';
         return;
     }
 
     checkoutBtn.style.display = 'block';
-    tripItemsContainer.innerHTML = '';
+    const checkoutText = translations[lang] ? translations[lang].btn_send_whatsapp : "Kirim Rencana ke WhatsApp";
+    checkoutBtn.innerHTML = `${checkoutText} <i class="fab fa-whatsapp"></i>`;
 
     tripPlan.forEach(item => {
+        const name = lang === 'en' ? (item.name_en || item.name) : (lang === 'ar' ? (item.name_ar || item.name) : item.name);
+        const areaData = allAreas.find(a => a.name === item.area);
+        const areaNameTranslated = areaData ? (lang === 'en' ? (areaData.name_en || areaData.name) : (lang === 'ar' ? (areaData.name_ar || areaData.name) : areaData.name)) : item.area;
         const icon = item.itemType.includes('Tamasya') ? 'fa-map-marked-alt' : 'fa-bed';
+
         const html = `
             <div class="trip-item">
-                <img src="${item.image}" alt="${item.name}" class="trip-item-img" onerror="this.src='https://via.placeholder.com/70'">
+                <img src="${item.image}" alt="${name}" class="trip-item-img" onerror="this.src='https://via.placeholder.com/70'">
                 <div class="trip-item-details">
-                    <div class="trip-item-title">${item.name}</div>
-                    <div class="trip-item-area"><i class="fas ${icon}"></i> ${item.area}</div>
+                    <div class="trip-item-title">${name}</div>
+                    <div class="trip-item-area"><i class="fas ${icon}"></i> ${areaNameTranslated}</div>
                     <div class="trip-item-price">${formatRupiah(item.price)}</div>
                 </div>
                 <button class="remove-item" onclick="toggleTripItem('${item.id}', '${item.itemType.includes('Tamasya') ? 'destination' : 'accommodation'}')">
@@ -518,23 +553,52 @@ function closeDrawer() {
 function processCheckout() {
     if (tripPlan.length === 0) return;
 
-    const destinasi = tripPlan.filter(t => t.itemType.includes('Tamasya')).map(t => `- ${t.name} (${t.area})`).join('%0A');
-    const akomodasi = tripPlan.filter(t => !t.itemType.includes('Tamasya')).map(t => `- ${t.name} (${t.area})`).join('%0A');
+    const lang = localStorage.getItem('fm_lang') || 'id';
 
-    let message = `Halo Admin FM-ID Tour,%0A%0ASaya ingin merencanakan perjalanan dengan detail trip plan berikut:%0A%0A`;
+    const destinasi = tripPlan.filter(t => t.itemType.includes('Tamasya')).map(t => {
+        const name = lang === 'en' ? (t.name_en || t.name) : (lang === 'ar' ? (t.name_ar || t.name) : t.name);
+        const areaData = allAreas.find(a => a.name === t.area);
+        const area = areaData ? (lang === 'en' ? (areaData.name_en || areaData.name) : (lang === 'ar' ? (areaData.name_ar || areaData.name) : areaData.name)) : t.area;
+        return `- ${name} (${area})`;
+    }).join('%0A');
+
+    const akomodasi = tripPlan.filter(t => !t.itemType.includes('Tamasya')).map(t => {
+        const name = lang === 'en' ? (t.name_en || t.name) : (lang === 'ar' ? (t.name_ar || t.name) : t.name);
+        const areaData = allAreas.find(a => a.name === t.area);
+        const area = areaData ? (lang === 'en' ? (areaData.name_en || areaData.name) : (lang === 'ar' ? (areaData.name_ar || areaData.name) : areaData.name)) : t.area;
+        return `- ${name} (${area})`;
+    }).join('%0A');
+
+    let intro = "Halo Admin FM-ID Tour,%0A%0ASaya ingin merencanakan perjalanan dengan detail trip plan berikut:";
+    let labelDest = "*Destinasi Wisata:*";
+    let labelAcc = "*Penginapan (Hotel/Villa):*";
+    let outro = "Tolong berikan informasi detail rincian paket dan ketersediaannya. Terima kasih!";
+
+    if (lang === 'en') {
+        intro = "Hello FM-ID Tour Admin,%0A%0AI would like to plan a trip with the following trip plan details:";
+        labelDest = "*Sightseeing Destinations:*";
+        labelAcc = "*Accommodations (Hotel/Villa):*";
+        outro = "Please provide detailed package information and availability. Thank you!";
+    } else if (lang === 'ar') {
+        intro = "مرحباً مسؤول FM-ID جولات وسفر،%0A%0Aأود التخطيط لرحلة بتفاصيل خطة الرحلة التالية:";
+        labelDest = "*الوجهات السياحية:*";
+        labelAcc = "*السكن (فندق/فيلا):*";
+        outro = "يرجى تقديم معلومات مفصلة عن الباقة ومدى توفرها. شكراً لك!";
+    }
+
+    let message = `${intro}%0A%0A`;
 
     if (destinasi.length > 0) {
-        message += `*Destinasi Wisata:*%0A${destinasi}%0A%0A`;
+        message += `${labelDest}%0A${destinasi}%0A%0A`;
     }
 
     if (akomodasi.length > 0) {
-        message += `*Penginapan (Hotel/Villa):*%0A${akomodasi}%0A%0A`;
+        message += `${labelAcc}%0A${akomodasi}%0A%0A`;
     }
 
-    message += `Tolong berikan informasi detail rincian paket dan ketersediaannya. Terima kasih!`;
+    message += outro;
 
-    const whatsappURL = `https://wa.me/${adminPhone}?text=${message}`;
-    window.open(whatsappURL, '_blank');
+    window.open(`https://wa.me/${adminPhone}?text=${message}`, '_blank');
 }
 
 function processFlightBooking(e) {
