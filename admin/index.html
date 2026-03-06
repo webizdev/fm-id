@@ -87,6 +87,14 @@
                 style="display:none; max-width: 600px; padding: 1.5rem; background: white; border-radius: var(--border-radius-md); box-shadow: var(--shadow-sm);">
                 <form id="form-hero">
                     <div class="form-group">
+                        <label>Background Gambar Hero</label>
+                        <input type="file" id="set-hero_image_upload" accept="image/*">
+                        <small style="display:block; margin-top:0.3rem; color:#6B7280;">Atau gunakan URL/Path yang sudah
+                            ada:</small>
+                        <input type="text" id="set-hero_image" placeholder="URL gambar atau assets/images/hero.png"
+                            style="margin-top:0.5rem;" required>
+                    </div>
+                    <div class="form-group">
                         <label>Text Pills / Badge</label>
                         <input type="text" id="set-hero_badge" required>
                     </div>

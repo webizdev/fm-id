@@ -115,6 +115,12 @@ function applySettingsToDOM() {
     updateText('dyn-footer-logo', webName);
 
     // Hero
+    const heroImg = getVal('hero_image');
+    if (heroImg) {
+        const heroBgEl = document.getElementById('dyn-hero-bg');
+        if (heroBgEl) heroBgEl.src = heroImg;
+    }
+
     const badgeText = getVal('hero_badge');
     if (badgeText) {
         updateHTML('dyn-hero-badge', `<i class="fas fa-sparkles"></i> ${badgeText}`);

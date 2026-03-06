@@ -349,6 +349,11 @@ function populateSettingsForms() {
     document.getElementById('set-hero_title').value = getVal('hero_title');
     document.getElementById('set-hero_subtitle').value = getVal('hero_subtitle');
 
+    // Set fallback hero image if somehow undefined
+    const heroImg = getVal('hero_image');
+    document.getElementById('set-hero_image').value = heroImg || 'assets/images/hero.png';
+    document.getElementById('set-hero_image_upload').value = '';
+
     // Footer
     document.getElementById('set-footer_desc').value = getVal('footer_desc');
     document.getElementById('set-cs_whatsapp').value = getVal('cs_whatsapp');
@@ -390,14 +395,59 @@ document.getElementById('form-pengaturan').addEventListener('submit', (e) => {
     saveSettings(updates, e.target.querySelector('button'));
 });
 
-document.getElementById('form-hero').addEventListener('submit', (e) => {
+document.getElementById('form-hero').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const updates = [
-        { key: 'hero_badge', value: document.getElementById('set-hero_badge').value },
-        { key: 'hero_title', value: document.getElementById('set-hero_title').value },
-        { key: 'hero_subtitle', value: document.getElementById('set-hero_subtitle').value }
-    ];
-    saveSettings(updates, e.target.querySelector('button'));
+
+    const btnSave = e.target.querySelector('button');
+    const originalText = btnSave.innerText;
+
+    try {
+        let imageUrl = document.getElementById('set-hero_image').value;
+        const fileInput = document.getElementById('set-hero_image_upload');
+
+        if (fileInput.files && fileInput.files.length > 0) {
+            btnSave.innerText = 'Mengunggah & Kompres...';
+            btnSave.disabled = true;
+            let file = fileInput.files[0];
+
+            try {
+                file = await compressImage(file, 500);
+            } catch (err) {
+                console.error("Compression warning:", err);
+            }
+
+            const fileExt = file.name.split('.').pop();
+            const fileName = `hero_${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+
+            const { error: uploadError } = await _supabase.storage
+                .from('fmidtour_images')
+                .upload(fileName, file);
+
+            if (uploadError) throw uploadError;
+
+            const { data: publicUrlData } = _supabase.storage
+                .from('fmidtour_images')
+                .getPublicUrl(fileName);
+
+            imageUrl = publicUrlData.publicUrl;
+            document.getElementById('set-hero_image').value = imageUrl;
+        }
+
+        const updates = [
+            { key: 'hero_image', value: imageUrl },
+            { key: 'hero_badge', value: document.getElementById('set-hero_badge').value },
+            { key: 'hero_title', value: document.getElementById('set-hero_title').value },
+            { key: 'hero_subtitle', value: document.getElementById('set-hero_subtitle').value }
+        ];
+
+        await saveSettings(updates, btnSave);
+
+    } catch (err) {
+        console.error('Save Hero Error:', err);
+        alert('Terjadi kesalahan saat menyimpan pengaturan hero.');
+        btnSave.innerText = originalText;
+        btnSave.disabled = false;
+    }
 });
 
 document.getElementById('form-footer').addEventListener('submit', (e) => {
