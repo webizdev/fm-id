@@ -173,17 +173,11 @@ section {
   box-shadow: 0 4px 10px rgba(224, 122, 95, 0.4);
 }
 
-.burger {
+.menu-toggle {
   display: none;
   cursor: pointer;
-}
-
-.burger div {
-  width: 25px;
-  height: 3px;
-  background-color: white;
-  margin: 5px;
-  transition: all 0.3s ease;
+  font-size: 1.5rem;
+  color: white;
 }
 
 /* ================== HERO SECTION ================== */
@@ -772,7 +766,7 @@ footer {
     right: 0;
   }
 
-  .burger {
+  .menu-toggle {
     display: block;
   }
 
