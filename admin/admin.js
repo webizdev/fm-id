@@ -128,8 +128,8 @@ window.deleteItem = async function (id) {
 console.log("Admin Dashboard Script Loaded.");
 
 // STATE & DATA
-let currentData = { destinations: [], accommodations: [], settings: [], blog: [] };
-let activeView = 'destinations'; // 'destinations', 'accommodations', 'pengaturan', 'hero', 'footer', 'blog'
+let currentData = { destinations: [], accommodations: [], settings: [], blog: [], areas: [] };
+let activeView = 'destinations'; // 'destinations', 'accommodations', 'pengaturan', 'hero', 'footer', 'blog', 'areas'
 
 // DOM Elements
 const loginScreen = document.getElementById('login-screen');
@@ -151,6 +151,8 @@ const heroContainer = document.getElementById('hero-container');
 const footerContainer = document.getElementById('footer-container');
 const blogContainer = document.getElementById('blog-container');
 const blogTableBody = document.getElementById('blog-table-body');
+const areasContainer = document.getElementById('areas-container');
+const areasTableBody = document.getElementById('areas-table-body');
 
 // Modal Elements
 const modal = document.getElementById('form-modal');
@@ -190,7 +192,10 @@ loginForm.addEventListener('submit', async (e) => {
 
         if (error) throw error;
 
-        if (data && pinInput.value === data.value) {
+        const storedPin = data ? String(data.value).trim() : null;
+        const inputPin = String(pinInput.value).trim();
+
+        if (storedPin && inputPin === storedPin) {
             sessionStorage.setItem('fm_admin_auth', 'true');
             showDashboard();
         } else {
@@ -224,19 +229,23 @@ async function fetchData() {
         const { data: accomData, error: accomError } = await _supabase.from('fmidtour_akomodasi').select('*');
         const { data: settingsData, error: settingsError } = await _supabase.from('fmidtour_settings').select('*');
         const { data: blogData, error: blogError } = await _supabase.from('fmidtour_blog').select('*').order('created_at', { ascending: false });
+        const { data: areasData, error: areasError } = await _supabase.from('fmidtour_areas').select('*').order('name');
 
-        if (destError || accomError || settingsError || blogError) {
-            console.error('Supabase fetch error:', destError || accomError || settingsError || blogError);
+        if (destError || accomError || settingsError || blogError || areasError) {
+            console.error('Supabase fetch error:', destError || accomError || settingsError || blogError || areasError);
             alert('Gagal mengambil data dari Supabase.');
         } else {
             currentData.destinations = destData || [];
             currentData.accommodations = accomData || [];
             currentData.settings = settingsData || [];
             currentData.blog = blogData || [];
+            currentData.areas = areasData || [];
 
             populateSettingsForms();
+            populateAreaDropdowns();
             renderTable();
             renderBlogTable();
+            renderAreasTable();
         }
     } catch (error) {
         console.error('Fetch Error:', error);
@@ -260,7 +269,8 @@ navItems.forEach(item => {
             'pengaturan': 'Pengaturan Dasar',
             'hero': 'Edit Hero Section',
             'footer': 'Edit Footer & Kontak',
-            'blog': 'Kelola Artikel Blog'
+            'blog': 'Kelola Artikel Blog',
+            'areas': 'Kelola Area Wisata'
         };
         pageTitle.innerText = titleMap[activeView] || 'Kelola Data';
 
@@ -274,16 +284,21 @@ function updateViewDisplay() {
     heroContainer.style.display = 'none';
     footerContainer.style.display = 'none';
     blogContainer.style.display = 'none';
+    areasContainer.style.display = 'none';
     btnAddNew.style.display = 'none';
 
-    if (activeView === 'destinations' || activeView === 'accommodations' || activeView === 'blog') {
+    if (activeView === 'destinations' || activeView === 'accommodations' || activeView === 'blog' || activeView === 'areas') {
         if (activeView === 'blog') {
             blogContainer.style.display = 'block';
+        } else if (activeView === 'areas') {
+            areasContainer.style.display = 'block';
         } else {
             tableContainer.style.display = 'block';
         }
         btnAddNew.style.display = 'inline-block';
-        if (activeView === 'blog') renderBlogTable(); else renderTable();
+        if (activeView === 'blog') renderBlogTable();
+        else if (activeView === 'areas') renderAreasTable();
+        else renderTable();
     } else if (activeView === 'pengaturan') {
         pengaturanContainer.style.display = 'block';
     } else if (activeView === 'hero') {
@@ -362,7 +377,8 @@ btnAddNew.addEventListener('click', () => {
     let modalTitleText = '';
     if (activeView === 'destinations') modalTitleText = 'Tambah Destinasi Baru';
     else if (activeView === 'accommodations') modalTitleText = 'Tambah Akomodasi Baru';
-    else modalTitleText = 'Tambah Artikel Blog';
+    else if (activeView === 'blog') modalTitleText = 'Tambah Artikel Blog';
+    else modalTitleText = 'Tambah Area Baru';
 
     document.getElementById('modal-title').innerText = modalTitleText;
     dataForm.reset();
@@ -374,12 +390,28 @@ btnAddNew.addEventListener('click', () => {
     document.getElementById('entry-group').value = activeView;
 
     // Toggle fields based on activeView
-    groupTypeField.style.display = activeView === 'accommodations' ? 'block' : 'none';
-    groupBlogFields.style.display = activeView === 'blog' ? 'block' : 'none';
-    priceField.style.display = activeView === 'blog' ? 'none' : 'block';
-    areaField.style.display = activeView === 'blog' ? 'none' : 'block';
+    if (activeView === 'areas') {
+        const nameField = document.getElementById('entry-name').closest('.form-group');
+        const areaFieldGroup = document.getElementById('entry-area').closest('.form-group');
+        const priceFieldGroup = document.getElementById('entry-price').closest('.form-group');
+        const imageFieldGroup = document.getElementById('entry-image-upload').closest('.form-group');
 
-    document.querySelector('label[for="entry-name"]').innerText = activeView === 'blog' ? 'Judul Artikel' : 'Nama Tempat';
+        nameField.style.display = 'block';
+        areaFieldGroup.style.display = 'none';
+        priceFieldGroup.style.display = 'none';
+        imageFieldGroup.style.display = 'none';
+        groupTypeField.style.display = 'none';
+        groupBlogFields.style.display = 'none';
+        document.querySelector('label[for="entry-name"]').innerText = 'Nama Area Baru';
+    } else {
+        groupTypeField.style.display = activeView === 'accommodations' ? 'block' : 'none';
+        groupBlogFields.style.display = activeView === 'blog' ? 'block' : 'none';
+        priceField.style.display = activeView === 'blog' ? 'none' : 'block';
+        areaField.style.display = activeView === 'blog' ? 'none' : 'block';
+        document.getElementById('entry-name').closest('.form-group').style.display = 'block';
+        document.getElementById('entry-image-upload').closest('.form-group').style.display = 'block';
+        document.querySelector('label[for="entry-name"]').innerText = activeView === 'blog' ? 'Judul Artikel' : 'Nama Tempat';
+    }
 
     modal.style.display = 'block';
 });
@@ -401,7 +433,8 @@ dataForm.addEventListener('submit', async (e) => {
     let table = '';
     if (group === 'destinations') table = 'fmidtour_destinasi';
     else if (group === 'accommodations') table = 'fmidtour_akomodasi';
-    else table = 'fmidtour_blog';
+    else if (group === 'blog') table = 'fmidtour_blog';
+    else table = 'fmidtour_areas';
 
     const btnSave = document.getElementById('btn-save');
     const originalText = btnSave.innerText;
@@ -459,6 +492,10 @@ dataForm.addEventListener('submit', async (e) => {
                 excerpt: document.getElementById('entry-excerpt').value,
                 content: document.getElementById('entry-content').value,
                 image: imageUrl
+            };
+        } else if (group === 'areas') {
+            newItem = {
+                name: document.getElementById('entry-name').value
             };
         } else {
             newItem = {

@@ -50,13 +50,10 @@
                     <div class="search-divider"></div>
                     <div class="search-input-inline">
                         <i class="fas fa-map-marker-alt input-icon"></i>
-                        <select id="search-dest" required>
-                            <option value="" disabled selected>Mau ke mana?</option>
-                            <option value="Jakarta">Jakarta</option>
-                            <option value="Bandung">Bandung</option>
-                            <option value="Puncak">Puncak</option>
-                            <option value="Bali">Bali</option>
-                        </select>
+                        <input type="text" id="search-dest" placeholder="Mau ke mana?" list="area-suggestions" required>
+                        <datalist id="area-suggestions">
+                            <!-- Options injected by JS -->
+                        </datalist>
                     </div>
                     <div class="search-divider"></div>
                     <div class="search-input-inline">
@@ -76,12 +73,9 @@
             <p>Pilih petualangan terbaik di berbagai kota unggulan kami.</p>
         </div>
 
-        <div class="area-filters" id="dest-filters">
-            <button class="filter-btn active" data-filter="all">Semua Area</button>
-            <button class="filter-btn" data-filter="Jakarta">Jakarta</button>
-            <button class="filter-btn" data-filter="Bandung">Bandung</button>
-            <button class="filter-btn" data-filter="Puncak">Puncak</button>
-            <button class="filter-btn" data-filter="Bali">Bali</button>
+        <div class="filter-container" id="dest-filters">
+            <button class="filter-btn active" data-filter="all">Semua</button>
+            <!-- Areas injected by JS -->
         </div>
 
         <div class="grid-container" id="destinations-grid">
@@ -100,12 +94,9 @@
             <p>Istirahat di tempat paling nyaman, dari hotel mewah hingga villa eksklusif.</p>
         </div>
 
-        <div class="area-filters" id="accom-filters">
-            <button class="filter-btn active" data-filter="all">Semua Area</button>
-            <button class="filter-btn" data-filter="Jakarta">Jakarta</button>
-            <button class="filter-btn" data-filter="Bandung">Bandung</button>
-            <button class="filter-btn" data-filter="Puncak">Puncak</button>
-            <button class="filter-btn" data-filter="Bali">Bali</button>
+        <div class="filter-container" id="accom-filters">
+            <button class="filter-btn active" data-filter="all">Semua</button>
+            <!-- Areas injected by JS -->
         </div>
 
         <div class="grid-container" id="accommodations-grid">

@@ -6,6 +6,7 @@ const _supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 // --- STATE ---
 let allDestinations = [];
 let allAccommodations = [];
+let allAreas = [];
 let siteSettings = [];
 let tripPlan = [];
 let adminPhone = "6282215197172";
@@ -74,8 +75,14 @@ async function fetchData() {
             .order('created_at', { ascending: false })
             .limit(6);
 
-        if (destError || accomError || settingsError || blogError) {
-            console.error('Supabase fetch error:', destError || accomError || settingsError || blogError);
+        // Fetch areas
+        const { data: areasData, error: areasError } = await _supabase
+            .from('fmidtour_areas')
+            .select('*')
+            .order('name');
+
+        if (destError || accomError || settingsError || blogError || areasError) {
+            console.error('Supabase fetch error:', destError || accomError || settingsError || blogError || areasError);
             showError(destGrid, "Gagal memuat destinasi.");
             showError(accomGrid, "Gagal memuat akomodasi.");
             return;
@@ -85,9 +92,11 @@ async function fetchData() {
 
         allDestinations = destData || [];
         allAccommodations = accomData || [];
+        allAreas = areasData || [];
         siteSettings = settingsData || [];
 
         applySettingsToDOM();
+        populateAreasUI();
         renderGrid(allDestinations, destGrid, 'destination', initialLimit);
         renderGrid(allAccommodations, accomGrid, 'accommodation', initialLimit);
         renderBlogGrid(blogData || []);
@@ -160,6 +169,41 @@ function applySettingsToDOM() {
     if (mapsEmbed) {
         updateHTML('dyn-footer-maps', mapsEmbed);
     }
+}
+
+function populateAreasUI() {
+    // 1. Hero Search Dropdown
+    const searchDest = document.getElementById('search-dest');
+    const areaSuggestions = document.getElementById('area-suggestions');
+
+    if (areaSuggestions) {
+        areaSuggestions.innerHTML = '';
+        allAreas.forEach(area => {
+            const option = document.createElement('option');
+            option.value = area.name;
+            areaSuggestions.appendChild(option);
+        });
+    }
+
+    // 2. Filter Buttons
+    const renderFilters = (container) => {
+        if (!container) return;
+        // Keep the "Semua" button
+        const allBtn = container.querySelector('[data-filter="all"]');
+        container.innerHTML = '';
+        if (allBtn) container.appendChild(allBtn);
+
+        allAreas.forEach(area => {
+            const btn = document.createElement('button');
+            btn.className = 'filter-btn';
+            btn.setAttribute('data-filter', area.name);
+            btn.innerText = area.name;
+            container.appendChild(btn);
+        });
+    };
+
+    renderFilters(destFilters);
+    renderFilters(accomFilters);
 }
 
 // --- RENDERING ---
