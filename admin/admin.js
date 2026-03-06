@@ -1,7 +1,131 @@
 // --- SUPABASE INTIALIZATION ---
 const supabaseUrl = 'https://pgltsyrtduvddpcdlchk.supabase.co';
 const supabaseKey = 'sb_publishable_qA1ikbX5NfBE1kAeG-3aOA_Kr1f-5xi';
-const _supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+let _supabase;
+
+try {
+    _supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    console.log("Supabase initialized successfully.");
+} catch (e) {
+    console.error("Supabase failed to initialize:", e);
+    alert("Koneksi ke database gagal. Silakan periksa koneksi internet Anda.");
+}
+
+// --- GLOBAL FUNCTIONS (Defined at top to prevent unresponsiveness) ---
+
+window.openEditModal = function (id, targetGroup = null) {
+    console.log('--- START openEditModal ---');
+    console.log('ID:', id, 'Target Group:', targetGroup);
+
+    try {
+        const modal = document.getElementById('form-modal');
+        if (!modal) throw new Error("Element #form-modal tidak ditemukan di DOM!");
+
+        let group = targetGroup || activeView;
+        console.log('Final Group:', group);
+
+        // Ensure data exists
+        let item = null;
+        if (currentData[group]) {
+            item = currentData[group].find(x => String(x.id) === String(id));
+        }
+
+        // Fallback: search in all groups
+        if (!item) {
+            console.log('Item not found in current group, searching others...');
+            for (const g of ['destinations', 'accommodations', 'blog']) {
+                if (currentData[g]) {
+                    item = currentData[g].find(x => String(x.id) === String(id));
+                    if (item) {
+                        group = g;
+                        console.log('Found item in group:', g);
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (!item) {
+            console.error('Item not found in any group:', id);
+            alert('Data tidak ditemukan (ID: ' + id + '). Silakan coba segarkan halaman.');
+            return;
+        }
+
+        console.log('Item Found:', item);
+
+        // UI Updates - Direct Lookups for Safety
+        const modalTitle = document.getElementById('modal-title');
+        if (modalTitle) {
+            modalTitle.innerText = group === 'blog' ? 'Edit Artikel Blog' : (group === 'destinations' ? 'Edit Destinasi' : 'Edit Akomodasi');
+        }
+
+        document.getElementById('entry-id').value = item.id || '';
+        document.getElementById('entry-group').value = group || '';
+
+        const nameInput = document.getElementById('entry-name');
+        const areaInput = document.getElementById('entry-area');
+        const priceInput = document.getElementById('entry-price');
+        const imageInput = document.getElementById('entry-image');
+        const typeInput = document.getElementById('entry-type');
+        const categoryInput = document.getElementById('entry-category');
+        const excerptInput = document.getElementById('entry-excerpt');
+        const contentInput = document.getElementById('entry-content');
+
+        if (nameInput) nameInput.value = item.name || item.title || '';
+        if (areaInput) areaInput.value = item.area || 'Jakarta';
+        if (priceInput) priceInput.value = item.price !== undefined ? item.price : '0';
+        if (imageInput) imageInput.value = item.image || '';
+        if (typeInput) typeInput.value = item.type || 'Hotel';
+
+        if (group === 'blog' && categoryInput) {
+            categoryInput.value = item.category || 'Tips Travel';
+            if (excerptInput) excerptInput.value = item.excerpt || '';
+            if (contentInput) contentInput.value = item.content || '';
+        }
+
+        const groupType = document.getElementById('group-type');
+        const groupBlog = document.getElementById('group-blog-fields');
+        const pField = document.getElementById('entry-price') ? document.getElementById('entry-price').closest('.form-group') : null;
+        const aField = document.getElementById('entry-area') ? document.getElementById('entry-area').closest('.form-group') : null;
+
+        if (groupType) groupType.style.display = group === 'accommodations' ? 'block' : 'none';
+        if (groupBlog) groupBlog.style.display = group === 'blog' ? 'block' : 'none';
+        if (pField) pField.style.display = group === 'blog' ? 'none' : 'block';
+        if (aField) aField.style.display = group === 'blog' ? 'none' : 'block';
+
+        const nameLabel = document.querySelector('label[for="entry-name"]');
+        if (nameLabel) nameLabel.innerText = group === 'blog' ? 'Judul Artikel' : 'Nama Tempat';
+
+        document.getElementById('entry-image-upload').value = '';
+
+        console.log('Showing Modal...');
+        modal.style.display = 'block';
+        console.log('--- END openEditModal (Success) ---');
+
+    } catch (error) {
+        console.error('Error in openEditModal:', error);
+        alert('Gagal membuka modal edit: ' + error.message);
+    }
+};
+
+window.deleteItem = async function (id) {
+    if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
+        let table = '';
+        if (activeView === 'destinations') table = 'fmidtour_destinasi';
+        else if (activeView === 'accommodations') table = 'fmidtour_akomodasi';
+        else table = 'fmidtour_blog';
+        try {
+            const { error } = await _supabase.from(table).delete().eq('id', id);
+            if (error) throw error;
+            await fetchData();
+        } catch (err) {
+            console.error('Delete Error:', err);
+            alert('Terjadi kesalahan saat menghapus data.');
+        }
+    }
+};
+
+console.log("Admin Dashboard Script Loaded.");
 
 // STATE & DATA
 let currentData = { destinations: [], accommodations: [], settings: [], blog: [] };
@@ -170,9 +294,44 @@ function updateViewDisplay() {
 }
 
 // RENDERING TABLE
+function renderTable() {
+    if (!tableBody) return;
+    tableBody.innerHTML = '';
+
+    // items depends on activeView (destinations or accommodations)
+    if (activeView !== 'destinations' && activeView !== 'accommodations') return;
+    if (!currentData[activeView]) return;
+
+    const items = currentData[activeView];
+
+    if (items.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Tidak ada data.</td></tr>`;
+        return;
+    }
+
+    items.forEach(item => {
+        const typeOrNull = item.type ? item.type : '-';
+        const tr = document.createElement('tr');
+        tr.dataset.id = item.id;
+        tr.innerHTML = `
+            <td><strong>${item.name}</strong><br><small style="color:#6B7280;">${item.image}</small></td>
+            <td>${item.area}</td>
+            <td>Rp ${parseInt(item.price).toLocaleString('id-ID')}</td>
+            <td>${typeOrNull}</td>
+            <td>
+                <button class="action-btn btn-edit" onclick="openEditModal('${item.id}')"><i class="fas fa-edit"></i></button>
+                <button class="action-btn btn-delete" onclick="deleteItem('${item.id}')"><i class="fas fa-trash"></i></button>
+            </td>
+        `;
+        tableBody.appendChild(tr);
+    });
+}
+
 function renderBlogTable() {
+    if (!blogTableBody) return;
     blogTableBody.innerHTML = '';
-    const items = currentData.blog || [];
+    if (!currentData.blog) return;
+    const items = currentData.blog;
 
     if (items.length === 0) {
         blogTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Tidak ada artikel blog.</td></tr>`;
@@ -182,6 +341,7 @@ function renderBlogTable() {
     items.forEach(item => {
         const date = new Date(item.created_at).toLocaleDateString('id-ID');
         const tr = document.createElement('tr');
+        tr.dataset.id = item.id;
         tr.innerHTML = `
             <td><strong>${item.title}</strong><br><small style="color:#6B7280;">slug: ${item.slug}</small></td>
             <td>${item.category}</td>
@@ -194,6 +354,8 @@ function renderBlogTable() {
         blogTableBody.appendChild(tr);
     });
 }
+
+// Event Delegation was removed in favor of direct onclick for maximum reliability in this dashboard.
 
 // MODAL CONTROLS
 btnAddNew.addEventListener('click', () => {
@@ -332,58 +494,7 @@ dataForm.addEventListener('submit', async (e) => {
     }
 });
 
-// EDIT FUNCTION
-window.openEditModal = function (id) {
-    const group = activeView;
-    const item = currentData[group].find(x => x.id === id);
-    if (!item) return;
-
-    document.getElementById('modal-title').innerText = group === 'destinations' ? 'Edit Destinasi' : 'Edit Akomodasi';
-    document.getElementById('entry-id').value = item.id;
-    document.getElementById('entry-group').value = group;
-    document.getElementById('entry-name').value = item.name;
-    document.getElementById('entry-area').value = item.area;
-    document.getElementById('entry-price').value = item.price || '';
-    document.getElementById('entry-image').value = item.image || '';
-    document.getElementById('entry-image-upload').value = '';
-
-    groupTypeField.style.display = group === 'accommodations' ? 'block' : 'none';
-    groupBlogFields.style.display = group === 'blog' ? 'block' : 'none';
-    priceField.style.display = group === 'blog' ? 'none' : 'block';
-    areaField.style.display = group === 'blog' ? 'none' : 'block';
-
-    document.querySelector('label[for="entry-name"]').innerText = group === 'blog' ? 'Judul Artikel' : 'Nama Tempat';
-
-    if (group === 'accommodations') {
-        document.getElementById('entry-type').value = item.type;
-    }
-    if (group === 'blog') {
-        document.getElementById('entry-name').value = item.title;
-        document.getElementById('entry-category').value = item.category;
-        document.getElementById('entry-excerpt').value = item.excerpt;
-        document.getElementById('entry-content').value = item.content;
-    }
-
-    modal.style.display = 'block';
-};
-
-// DELETE FUNCTION
-window.deleteItem = async function (id) {
-    if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
-        let table = '';
-        if (activeView === 'destinations') table = 'fmidtour_destinasi';
-        else if (activeView === 'accommodations') table = 'fmidtour_akomodasi';
-        else table = 'fmidtour_blog';
-        try {
-            const { error } = await _supabase.from(table).delete().eq('id', id);
-            if (error) throw error;
-            await fetchData();
-        } catch (err) {
-            console.error('Delete Error:', err);
-            alert('Terjadi kesalahan saat menghapus data.');
-        }
-    }
-};
+// Functions moved to top.
 
 // SETTINGS & CONTENT MANAGEMENT
 function populateSettingsForms() {
@@ -393,24 +504,32 @@ function populateSettingsForms() {
     };
 
     // Pengaturan
-    document.getElementById('set-web_name').value = getVal('web_name');
-    document.getElementById('set-admin_password').value = getVal('admin_password');
+    const webNameEl = document.getElementById('set-web_name');
+    const adminPassEl = document.getElementById('set-admin_password');
+    if (webNameEl) webNameEl.value = getVal('web_name');
+    if (adminPassEl) adminPassEl.value = getVal('admin_password');
 
     // Hero
-    document.getElementById('set-hero_badge').value = getVal('hero_badge');
-    document.getElementById('set-hero_title').value = getVal('hero_title');
-    document.getElementById('set-hero_subtitle').value = getVal('hero_subtitle');
+    const heroBadgeEl = document.getElementById('set-hero_badge');
+    const heroTitleEl = document.getElementById('set-hero_title');
+    const heroSubtitleEl = document.getElementById('set-hero_subtitle');
+    const heroImageEl = document.getElementById('set-hero_image');
 
-    // Set fallback hero image if somehow undefined
-    const heroImg = getVal('hero_image');
-    document.getElementById('set-hero_image').value = heroImg || 'assets/images/hero.png';
-    document.getElementById('set-hero_image_upload').value = '';
+    if (heroBadgeEl) heroBadgeEl.value = getVal('hero_badge');
+    if (heroTitleEl) heroTitleEl.value = getVal('hero_title');
+    if (heroSubtitleEl) heroSubtitleEl.value = getVal('hero_subtitle');
+    if (heroImageEl) heroImageEl.value = getVal('hero_image') || 'assets/images/hero.png';
 
     // Footer
-    document.getElementById('set-footer_desc').value = getVal('footer_desc');
-    document.getElementById('set-cs_whatsapp').value = getVal('cs_whatsapp');
-    document.getElementById('set-address').value = getVal('address');
-    document.getElementById('set-maps_embed').value = getVal('maps_embed');
+    const footerDescEl = document.getElementById('set-footer_desc');
+    const csWhatsappEl = document.getElementById('set-cs_whatsapp');
+    const addressEl = document.getElementById('set-address');
+    const mapsEmbedEl = document.getElementById('set-maps_embed');
+
+    if (footerDescEl) footerDescEl.value = getVal('footer_desc');
+    if (csWhatsappEl) csWhatsappEl.value = getVal('cs_whatsapp');
+    if (addressEl) addressEl.value = getVal('address');
+    if (mapsEmbedEl) mapsEmbedEl.value = getVal('maps_embed');
 }
 
 async function saveSettings(updates, btnElement) {

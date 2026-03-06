@@ -79,7 +79,12 @@ async function fetchArticleDetail(slug) {
         const date = new Date(data.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 
         document.getElementById('article-title').innerText = data.title;
-        document.getElementById('article-meta').innerHTML = `<i class="fas fa-calendar-alt"></i> ${date} &nbsp; | &nbsp; <i class="fas fa-tag"></i> ${data.category} &nbsp; | &nbsp; <i class="fas fa-user"></i> ${data.author}`;
+        const metaBadge = document.getElementById('article-meta-badge');
+        if (metaBadge) metaBadge.innerText = data.category;
+
+        const metaText = document.getElementById('article-meta-text');
+        if (metaText) metaText.innerHTML = `<i class="fas fa-calendar-alt"></i> ${date} &nbsp; | &nbsp; <i class="fas fa-user"></i> ${data.author}`;
+
         document.getElementById('article-hero-img').src = data.image;
         document.getElementById('article-content').innerHTML = data.content;
 

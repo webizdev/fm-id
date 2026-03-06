@@ -67,12 +67,12 @@ async function fetchData() {
             .from('fmidtour_settings')
             .select('*');
 
-        // Fetch latest 3 blogs
+        // Fetch latest 6 blogs (to check if > 5)
         const { data: blogData, error: blogError } = await _supabase
             .from('fmidtour_blog')
             .select('*')
             .order('created_at', { ascending: false })
-            .limit(3);
+            .limit(6);
 
         if (destError || accomError || settingsError || blogError) {
             console.error('Supabase fetch error:', destError || accomError || settingsError || blogError);
@@ -210,7 +210,10 @@ function renderBlogGrid(data) {
         return;
     }
 
-    data.forEach(item => {
+    // Show only first 5
+    const displayData = data.slice(0, 5);
+
+    displayData.forEach(item => {
         const date = new Date(item.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
         const cardHTML = `
             <div class="travel-card fade-in">
@@ -228,6 +231,16 @@ function renderBlogGrid(data) {
         `;
         blogGrid.insertAdjacentHTML('beforeend', cardHTML);
     });
+
+    // Add "Lihat Semua Artikel" button if data > 5
+    if (data.length > 5) {
+        const btnWrapper = `
+            <div style="grid-column: 1/-1; text-align: center; margin-top: 3rem;">
+                <a href="blog.html" class="btn-primary" style="display: inline-block; padding: 1rem 2rem; border-radius: 50px; text-decoration: none;">Lihat Semua Artikel <i class="fas fa-chevron-right"></i></a>
+            </div>
+        `;
+        blogGrid.insertAdjacentHTML('beforeend', btnWrapper);
+    }
 }
 
 // --- FILTERING ---

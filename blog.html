@@ -32,17 +32,21 @@
         </div>
     </nav>
 
-    <header class="hero-page"
-        style="background: linear-gradient(rgba(10, 31, 46, 0.7), rgba(10, 31, 46, 0.7)), url('https://images.unsplash.com/photo-1506929113614-b9b6773530f2?auto=format&fit=crop&q=80&w=1920'); background-size: cover; background-position: center; padding: 10rem 2rem 6rem; text-align: center; color: white;">
-        <h1 style="font-size: 3rem; margin-bottom: 1rem;">Blog & Article</h1>
-        <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto; opacity: 0.9;">Inspirasi liburan dan tips menarik
-            untuk pengalaman perjalanan terbaik Anda.</p>
+    <header class="hero" style="height: 60vh; min-height: 400px;">
+        <img src="https://images.unsplash.com/photo-1506929113614-b9b6773530f2?auto=format&fit=crop&q=80&w=1920"
+            alt="Blog Hero" class="hero-bg">
+        <div class="hero-overlay"></div>
+        <div class="hero-content-clean">
+            <div class="hero-badge"><i class="fas fa-sparkles"></i> Insights & Inspiration</div>
+            <h1>Blog & <span>Article</span></h1>
+            <p>Tips perjalanan, rekomendasi destinasi, dan cerita seru dari FM-ID Tour&Travel.</p>
+        </div>
     </header>
 
-    <section style="padding: 5rem 2rem;">
+    <section id="blog-listing">
         <div class="grid-container" id="blog-page-grid">
             <!-- Blog cards injected here -->
-            <div style="text-align:center; width:100%; grid-column: 1/-1;">
+            <div style="text-align:center; width:100%; grid-column: 1/-1; padding: 3rem;">
                 <i class="fas fa-spinner fa-spin fa-3x" style="color:var(--color-primary);"></i>
                 <p style="margin-top:1rem;">Memuat semua artikel...</p>
             </div>
@@ -51,12 +55,12 @@
 
     <footer>
         <div class="footer-content">
-            <div class="footer-section">
+            <div class="footer-col">
                 <h2 class="logo">FM-ID <span>Tour&Travel</span></h2>
                 <p>Spesialis penyedia pengalaman liburan premium dan terpercaya untuk area Jakarta, Bandung, Puncak, dan
                     Bali.</p>
             </div>
-            <div class="footer-section">
+            <div class="footer-col">
                 <h3>Tautan Cepat</h3>
                 <ul>
                     <li><a href="index.html#destinations">Destinasi</a></li>
@@ -65,7 +69,7 @@
                     <li><a href="index.html#flights">Tiket Pesawat</a></li>
                 </ul>
             </div>
-            <div class="footer-section">
+            <div class="footer-col">
                 <h3>Hubungi Kami</h3>
                 <p><i class="fab fa-whatsapp"></i> 082215197172</p>
                 <p><i class="fas fa-map-marker-alt"></i> Puncak, Bandung, Bali, Indonesia</p>
