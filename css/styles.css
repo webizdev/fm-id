@@ -476,6 +476,15 @@ section {
 }
 
 /* Area Filter Buttons */
+.filter-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1.5rem 0 4rem;
+  /* Increased vertical space */
+  flex-wrap: wrap;
+}
+
 .area-filters {
   display: flex;
   justify-content: center;
