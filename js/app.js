@@ -161,6 +161,14 @@ function applySettingsToDOM() {
             formatted = '62' + formatted.substring(1);
         }
         adminPhone = formatted;
+
+        // Update Nav Contact Button
+        const navContact = document.getElementById('dyn-nav-contact');
+        if (navContact) {
+            const encodedMsg = encodeURIComponent("Halo admin, saya mau bertanya tentang tour & travel ke..");
+            navContact.href = `https://wa.me/${adminPhone}?text=${encodedMsg}`;
+            navContact.target = "_blank";
+        }
     }
 
     updateText('dyn-footer-address', getVal('address'));

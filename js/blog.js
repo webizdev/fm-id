@@ -16,7 +16,37 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (window.location.pathname.includes('blog.html')) {
         fetchAllArticles();
     }
+
+    // Always update WhatsApp Link in Nav if possible
+    updateNavWhatsApp();
 });
+
+async function updateNavWhatsApp() {
+    const navContact = document.getElementById('dyn-nav-contact');
+    if (!navContact) return;
+
+    try {
+        const { data, error } = await _supabase
+            .from('fmidtour_settings')
+            .select('value')
+            .eq('key', 'cs_whatsapp')
+            .single();
+
+        if (error) throw error;
+        if (data && data.value) {
+            let waRaw = data.value;
+            let formatted = waRaw.replace(/\D/g, '');
+            if (formatted.startsWith('0')) {
+                formatted = '62' + formatted.substring(1);
+            }
+            const encodedMsg = encodeURIComponent("Halo admin, saya mau bertanya tentang tour & travel ke..");
+            navContact.href = `https://wa.me/${formatted}?text=${encodedMsg}`;
+            navContact.target = "_blank";
+        }
+    } catch (err) {
+        console.error('Error updating nav WA link:', err);
+    }
+}
 
 async function fetchAllArticles() {
     const blogGrid = document.getElementById('blog-page-grid');
