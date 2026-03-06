@@ -411,7 +411,7 @@ document.getElementById('form-hero').addEventListener('submit', async (e) => {
             let file = fileInput.files[0];
 
             try {
-                file = await compressImage(file, 500);
+                file = await compressImage(file, 1000);
             } catch (err) {
                 console.error("Compression warning:", err);
             }
