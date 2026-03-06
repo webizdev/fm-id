@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FM-ID Tour&Travel | Oceanic Neo-Elegance</title>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS styles -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/trip_plan.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="logo" id="dyn-navbar-logo">FM-ID Tour&Travel</a>
+        <div class="menu-toggle" id="mobile-menu">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="#destinations">Tamasya</a></li>
+            <li><a href="#accommodations">Hotel & Villa</a></li>
+            <li><a href="#flights">Tiket Pesawat</a></li>
+            <li><a href="#contact" class="btn-nav-contact">Hubungi Kami</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <!-- AI Generated Placeholder Background -->
+        <img src="assets/images/hero.png" alt="Tropical Beach Resort Bali" class="hero-bg">
+        <div class="hero-overlay"></div>
+        <div class="hero-content-clean">
+            <div class="hero-badge" id="dyn-hero-badge"><i class="fas fa-sparkles"></i> EXPERT TOUR & TRAVEL</div>
+            <h1 id="dyn-hero-title">Jelajahi Momen</h1>
+            <p id="dyn-hero-subtitle">Spesialis tamasya area Puncak, Bandung, Bali. Tersedia sewa Hotel, Villa
+                eksklusif, dan Tiket Pesawat
+                untuk liburan impian Anda.</p>
+
+            <div class="hero-search-pill">
+                <form id="hero-search-form">
+                    <div class="search-input-inline">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" id="search-name" placeholder="Nama Anda" required>
+                    </div>
+                    <div class="search-divider"></div>
+                    <div class="search-input-inline">
+                        <i class="fas fa-map-marker-alt input-icon"></i>
+                        <select id="search-dest" required>
+                            <option value="" disabled selected>Mau ke mana?</option>
+                            <option value="Jakarta">Jakarta</option>
+                            <option value="Bandung">Bandung</option>
+                            <option value="Puncak">Puncak</option>
+                            <option value="Bali">Bali</option>
+                        </select>
+                    </div>
+                    <div class="search-divider"></div>
+                    <div class="search-input-inline">
+                        <i class="fas fa-calendar-alt input-icon"></i>
+                        <input type="date" id="search-date" required>
+                    </div>
+                    <button type="submit" class="btn-search-pill"><i class="fab fa-whatsapp"></i> Tiket</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Destinasi Wisata -->
+    <section id="destinations">
+        <div class="title-section">
+            <h2>Destinasi Tamasya</h2>
+            <p>Pilih petualangan terbaik di berbagai kota unggulan kami.</p>
+        </div>
+
+        <div class="area-filters" id="dest-filters">
+            <button class="filter-btn active" data-filter="all">Semua Area</button>
+            <button class="filter-btn" data-filter="Jakarta">Jakarta</button>
+            <button class="filter-btn" data-filter="Bandung">Bandung</button>
+            <button class="filter-btn" data-filter="Puncak">Puncak</button>
+            <button class="filter-btn" data-filter="Bali">Bali</button>
+        </div>
+
+        <div class="grid-container" id="destinations-grid">
+            <!-- Data will be populated here via JS -->
+            <div style="text-align: center; width: 100%; grid-column: 1 / -1; padding: 2rem;">
+                <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--color-primary)"></i>
+                <p style="margin-top: 1rem">Memuat data destinasi...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Akomodasi -->
+    <section id="accommodations">
+        <div class="title-section">
+            <h2>Hotel & Villa Pilihan</h2>
+            <p>Istirahat di tempat paling nyaman, dari hotel mewah hingga villa eksklusif.</p>
+        </div>
+
+        <div class="area-filters" id="accom-filters">
+            <button class="filter-btn active" data-filter="all">Semua Area</button>
+            <button class="filter-btn" data-filter="Jakarta">Jakarta</button>
+            <button class="filter-btn" data-filter="Bandung">Bandung</button>
+            <button class="filter-btn" data-filter="Puncak">Puncak</button>
+            <button class="filter-btn" data-filter="Bali">Bali</button>
+        </div>
+
+        <div class="grid-container" id="accommodations-grid">
+            <!-- Data will be populated here via JS -->
+            <div style="text-align: center; width: 100%; grid-column: 1 / -1; padding: 2rem;">
+                <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--color-primary)"></i>
+                <p style="margin-top: 1rem">Memuat data akomodasi...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tiket Pesawat -->
+    <section id="flights" style="background-color: var(--color-bg-light);">
+        <div class="title-section">
+            <h2>Pemesanan Tiket Pesawat</h2>
+            <p>Isi formulir pengajuan di bawah ini untuk mencari tiket penerbangan terbaik.</p>
+        </div>
+
+        <div class="flight-form-container">
+            <form id="flight-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Kota Asal <i class="fas fa-plane-departure"></i></label>
+                        <input type="text" id="flight-origin" required placeholder="Contoh: Jakarta (CGK)">
+                    </div>
+                    <div class="form-group">
+                        <label>Kota Tujuan <i class="fas fa-plane-arrival"></i></label>
+                        <input type="text" id="flight-dest" required placeholder="Contoh: Denpasar (DPS)">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tanggal Keberangkatan <i class="fas fa-calendar-alt"></i></label>
+                        <input type="date" id="flight-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Jumlah Penumpang <i class="fas fa-users"></i></label>
+                        <input type="number" id="flight-pax" min="1" max="10" value="1" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;">Cari & Pesan via
+                    WhatsApp <i class="fab fa-whatsapp"></i></button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-col">
+                <div class="footer-logo" id="dyn-footer-logo">FM-ID Tour&Travel</div>
+                <p id="dyn-footer-desc">Spesialis penyedia pengalaman liburan premium dan terpercaya untuk area Jakarta,
+                    Bandung, Puncak, dan
+                    Bali.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Navigasi</h4>
+                <a href="#destinations">Destinasi Thamrin</a>
+                <a href="#accommodations">Hotel & Villa</a>
+                <a href="#flights">Tiket Pesawat</a>
+            </div>
+            <div class="footer-col">
+                <h4>Layanan Pelanggan</h4>
+                <p><i class="fab fa-whatsapp"></i> <span id="dyn-footer-wa">+62 822-1519-7172</span></p>
+                <p><i class="fas fa-map-marker-alt"></i> <span id="dyn-footer-address">JL.Hanjawar pacet, Cipanas Puncak
+                        kota Bunga no 40</span></p>
+            </div>
+            <div class="footer-col" id="dyn-footer-maps-wrapper">
+                <h4>Temukan Kami</h4>
+                <div class="maps-container" id="dyn-footer-maps"
+                    style="border-radius:12px; overflow:hidden; border: 2px solid rgba(255,255,255,0.1);">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d86679.34684829535!2d107.01847845239787!3d-6.710580180915561!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69b1cea0423117%3A0xae00fd4778c50344!2sKota%20bunga%20puncak!5e1!3m2!1sen!2sid!4v1772810264876!5m2!1sen!2sid"
+                        width="100%" height="150" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 FM-ID Tour&Travel. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- Trip Plan Drawer / Floating Button -->
+    <div id="trip-plan-trigger" class="trip-trigger">
+        <div class="trip-icon">
+            <i class="fas fa-suitcase-rolling"></i>
+            <span class="trip-badge" id="trip-badge">0</span>
+        </div>
+    </div>
+
+    <div id="trip-drawer" class="trip-drawer">
+        <div class="drawer-header">
+            <h3>Rencana Trip Anda <i class="fas fa-suitcase-rolling"></i></h3>
+            <button id="close-drawer" class="close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="drawer-body" id="trip-items-container">
+            <!-- Items dynamically injected here -->
+            <div class="empty-state">Belum ada destinasi atau akomodasi yang dipilih.</div>
+        </div>
+        <div class="drawer-footer">
+            <button id="checkout-whatsapp" class="btn-primary" style="width: 100%; display:none;">Kirim Rencana ke
+                WhatsApp <i class="fab fa-whatsapp"></i></button>
+        </div>
+    </div>
+    <div id="drawer-overlay" class="drawer-overlay"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

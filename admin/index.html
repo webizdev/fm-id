@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | FM-ID Tour</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen" class="login-wrapper">
+        <div class="login-box">
+            <div class="login-logo">FM-ID <span>Admin</span></div>
+            <h2>Dashboard Login</h2>
+            <form id="login-form">
+                <input type="password" id="admin-pin" placeholder="Masukkan PIN (1234)" required>
+                <button type="submit" class="btn-primary">Masuk</button>
+                <p id="login-error" class="error-msg" style="display:none;">PIN Salah!</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- DASHBOARD LAYOUT -->
+    <div id="dashboard-screen" class="dashboard-wrapper" style="display:none;">
+        <aside class="sidebar">
+            <div class="sidebar-logo">FM-ID <span>Admin</span></div>
+            <ul class="nav-menu">
+                <li class="active" data-view="destinations"><i class="fas fa-map-marked-alt"></i> Kelola Destinasi</li>
+                <li data-view="accommodations"><i class="fas fa-bed"></i> Kelola Akomodasi</li>
+                <li
+                    style="margin-top:20px; font-size:0.8rem; color:#aaa; text-transform:uppercase; pointer-events:none;">
+                    CMS Konten</li>
+                <li data-view="pengaturan"><i class="fas fa-cog"></i> Pengaturan</li>
+                <li data-view="hero"><i class="fas fa-image"></i> Edit Hero</li>
+                <li data-view="footer"><i class="fas fa-info-circle"></i> Edit Footer</li>
+            </ul>
+            <button id="logout-btn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Keluar</button>
+            <a href="../index.html" class="logout-btn"
+                style="margin-top: 10px; text-decoration: none; text-align: center; background: rgba(255,255,255,0.1);"><i
+                    class="fas fa-external-link-alt"></i> Lihat Web</a>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-header">
+                <h1 id="page-title">Kelola Destinasi</h1>
+                <button id="btn-add-new" class="btn-primary"><i class="fas fa-plus"></i> Tambah Baru</button>
+            </header>
+
+            <div id="table-container" class="table-container">
+                <table id="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Area</th>
+                            <th>Harga</th>
+                            <th>Tipe/Kategori</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <!-- Data rows injected by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- SETTINGS CONTAINERS -->
+            <div id="pengaturan-container" class="settings-container"
+                style="display:none; max-width: 600px; padding: 1.5rem; background: white; border-radius: var(--border-radius-md); box-shadow: var(--shadow-sm);">
+                <form id="form-pengaturan">
+                    <div class="form-group">
+                        <label>Nama Web / Text Logo</label>
+                        <input type="text" id="set-web_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password Admin Baru</label>
+                        <input type="text" id="set-admin_password" required>
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%;">Simpan Pengaturan</button>
+                </form>
+            </div>
+
+            <div id="hero-container" class="settings-container"
+                style="display:none; max-width: 600px; padding: 1.5rem; background: white; border-radius: var(--border-radius-md); box-shadow: var(--shadow-sm);">
+                <form id="form-hero">
+                    <div class="form-group">
+                        <label>Text Pills / Badge</label>
+                        <input type="text" id="set-hero_badge" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Title Hero</label>
+                        <input type="text" id="set-hero_title" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Sub Title Hero</label>
+                        <textarea id="set-hero_subtitle" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%;">Simpan Hero</button>
+                </form>
+            </div>
+
+            <div id="footer-container" class="settings-container"
+                style="display:none; max-width: 600px; padding: 1.5rem; background: white; border-radius: var(--border-radius-md); box-shadow: var(--shadow-sm);">
+                <form id="form-footer">
+                    <div class="form-group">
+                        <label>Deskripsi Footer</label>
+                        <textarea id="set-footer_desc" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Nomor WhatsApp CS (Gunakan format 08xxx)</label>
+                        <input type="text" id="set-cs_whatsapp" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Alamat Lengkap</label>
+                        <textarea id="set-address" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Link Embed Maps (Code iframe)</label>
+                        <textarea id="set-maps_embed" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%;">Simpan Footer</button>
+                </form>
+            </div>
+
+            <div id="loading-indicator" style="text-align:center; padding: 2rem;">
+                <i class="fas fa-spinner fa-spin fa-2x"></i> Memuat Data...
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL FORM -->
+    <div id="form-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="modal-title">Edit Data</h2>
+            <form id="data-form">
+                <input type="hidden" id="entry-id">
+                <input type="hidden" id="entry-group"> <!-- 'destinations' or 'accommodations' -->
+
+                <div class="form-group">
+                    <label>Nama Tempat</label>
+                    <input type="text" id="entry-name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Area</label>
+                    <select id="entry-area" required>
+                        <option value="Jakarta">Jakarta</option>
+                        <option value="Bandung">Bandung</option>
+                        <option value="Puncak">Puncak</option>
+                        <option value="Bali">Bali</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Harga (Rp) - 0 untuk gratis/custom</label>
+                    <input type="number" id="entry-price" required min="0">
+                </div>
+
+                <div class="form-group" id="group-type" style="display:none;">
+                    <label>Tipe Akomodasi</label>
+                    <select id="entry-type">
+                        <option value="Hotel">Hotel</option>
+                        <option value="Villa">Villa</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Upload Gambar Baru</label>
+                    <input type="file" id="entry-image-upload" accept="image/*">
+                    <small style="display:block; margin-top:0.3rem; color:#6B7280;">Atau gunakan URL/Path yang sudah
+                        ada:</small>
+                    <input type="text" id="entry-image" required placeholder="URL gambar atau assets/images/contoh.jpg"
+                        style="margin-top:0.5rem;">
+                </div>
+
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;" id="btn-save">Simpan
+                    Data</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="admin.js"></script>
+</body>
+
+</html>

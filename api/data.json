@@ -1,0 +1,26 @@
+{
+  "destinations": [
+    { "id": "d1", "area": "Jakarta", "name": "Monumen Nasional (Monas)", "price": 50000, "image": "assets/images/monas.jpg" },
+    { "id": "d2", "area": "Jakarta", "name": "Taman Mini Indonesia Indah (TMII)", "price": 75000, "image": "assets/images/tmii.jpg" },
+    { "id": "d3", "area": "Jakarta", "name": "Kawasan Kota Tua", "price": 0, "image": "assets/images/kota_tua.jpg" },
+    { "id": "d4", "area": "Bandung", "name": "Kawah Putih Ciwidey", "price": 100000, "image": "assets/images/kawah_putih.jpg" },
+    { "id": "d5", "area": "Bandung", "name": "Tangkuban Perahu", "price": 80000, "image": "assets/images/tangkuban.jpg" },
+    { "id": "d6", "area": "Bandung", "name": "Jalan Braga", "price": 0, "image": "assets/images/braga.jpg" },
+    { "id": "d7", "area": "Puncak", "name": "Taman Safari Indonesia", "price": 250000, "image": "assets/images/taman_safari.jpg" },
+    { "id": "d8", "area": "Puncak", "name": "Kebun Raya Cibodas", "price": 50000, "image": "assets/images/cibodas.jpg" },
+    { "id": "d9", "area": "Puncak", "name": "Little Venice Kota Bunga", "price": 75000, "image": "assets/images/little_venice.jpg" },
+    { "id": "d10", "area": "Bali", "name": "Pantai Kuta", "price": 0, "image": "assets/images/pantai_kuta.jpg" },
+    { "id": "d11", "area": "Bali", "name": "Pura Uluwatu", "price": 60000, "image": "assets/images/uluwatu.jpg" },
+    { "id": "d12", "area": "Bali", "name": "Garuda Wisnu Kencana", "price": 125000, "image": "assets/images/gwk.jpg" }
+  ],
+  "accommodations": [
+    { "id": "a1", "area": "Jakarta", "name": "Hotel Indonesia Kempinski", "price": 2500000, "image": "assets/images/kempinski.jpg", "type": "Hotel" },
+    { "id": "a2", "area": "Jakarta", "name": "Villa Kemang Botanica", "price": 3500000, "image": "assets/images/kemang.jpg", "type": "Villa" },
+    { "id": "a3", "area": "Bandung", "name": "The Trans Luxury Hotel", "price": 1800000, "image": "assets/images/trans.jpg", "type": "Hotel" },
+    { "id": "a4", "area": "Bandung", "name": "Villa Air Natural Resort Lembang", "price": 2200000, "image": "assets/images/villa_air.jpg", "type": "Villa" },
+    { "id": "a5", "area": "Puncak", "name": "Le Eminence Puncak Hotel Resort", "price": 1200000, "image": "assets/images/eminence.jpg", "type": "Hotel" },
+    { "id": "a6", "area": "Puncak", "name": "Villa Kota Bunga Blok Q", "price": 1500000, "image": "assets/images/kota_bunga_villa.jpg", "type": "Villa" },
+    { "id": "a7", "area": "Bali", "name": "The Apurva Kempinski Bali", "price": 4500000, "image": "assets/images/apurva.jpg", "type": "Hotel" },
+    { "id": "a8", "area": "Bali", "name": "Villa Seminyak Estate", "price": 5500000, "image": "assets/images/seminyak.jpg", "type": "Villa" }
+  ]
+}

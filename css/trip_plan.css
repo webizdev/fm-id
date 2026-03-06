@@ -1,0 +1,278 @@
+/* ================== FLIGHT FORM ================== */
+.flight-form-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 3rem;
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(11, 61, 59, 0.1);
+}
+
+.form-row {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--color-primary);
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-group input {
+    padding: 1rem;
+    border: 2px solid #E5E7EB;
+    border-radius: 12px;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    transition: var(--transition);
+    background-color: var(--color-bg-light);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background-color: white;
+    box-shadow: 0 0 0 4px rgba(11, 61, 59, 0.1);
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+}
+
+/* ================== TRIP PLAN SUITCASE (FLOATING) ================== */
+.trip-trigger {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 990;
+    cursor: pointer;
+    animation: bounce 2s infinite ease-in-out;
+}
+
+.trip-icon {
+    width: 65px;
+    height: 65px;
+    background: var(--color-accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.8rem;
+    box-shadow: 0 10px 25px rgba(224, 122, 95, 0.5);
+    transition: var(--transition);
+    position: relative;
+}
+
+.trip-icon:hover {
+    transform: scale(1.1);
+    background: #d16b50;
+    box-shadow: 0 15px 35px rgba(224, 122, 95, 0.7);
+}
+
+.trip-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--color-primary);
+    color: white;
+    min-width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* ================== TRIP PLAN DRAWER ================== */
+.trip-drawer {
+    position: fixed;
+    top: 0;
+    right: -450px;
+    width: 100%;
+    max-width: 400px;
+    height: 100vh;
+    background: white;
+    z-index: 1001;
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+    transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.trip-drawer.open {
+    right: 0;
+}
+
+.drawer-header {
+    padding: 1.5rem;
+    background: var(--color-primary);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.drawer-header h3 {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.close-btn:hover {
+    transform: rotate(90deg);
+    color: var(--color-accent);
+}
+
+.drawer-body {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+}
+
+.drawer-footer {
+    padding: 1.5rem;
+    border-top: 1px solid #E5E7EB;
+    background: var(--color-bg-light);
+}
+
+/* Drawer Items */
+.empty-state {
+    text-align: center;
+    color: #6B7280;
+    padding: 3rem 1rem;
+    background: var(--color-bg-light);
+    border-radius: 12px;
+    border: 2px dashed #E5E7EB;
+}
+
+.trip-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    background: white;
+    position: relative;
+    transition: var(--transition);
+}
+
+.trip-item:hover {
+    border-color: var(--color-primary-light);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.trip-item-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.trip-item-details {
+    flex-grow: 1;
+}
+
+.trip-item-title {
+    font-weight: 600;
+    color: var(--color-primary);
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+}
+
+.trip-item-area {
+    font-size: 0.8rem;
+    color: #6B7280;
+    margin-bottom: 0.5rem;
+}
+
+.trip-item-price {
+    font-weight: 700;
+    color: var(--color-accent);
+    font-size: 0.95rem;
+}
+
+.remove-item {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: #FEE2E2;
+    color: #EF4444;
+    border: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+}
+
+.remove-item:hover {
+    background: #EF4444;
+    color: white;
+}
+
+/* Overlay for Drawer */
+.drawer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(11, 61, 59, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.drawer-overlay.open {
+    display: block;
+    opacity: 1;
+}
