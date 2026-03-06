@@ -81,13 +81,15 @@ async function fetchData() {
             return;
         }
 
+        const initialLimit = window.innerWidth < 768 ? 2 : 5;
+
         allDestinations = destData || [];
         allAccommodations = accomData || [];
         siteSettings = settingsData || [];
 
         applySettingsToDOM();
-        renderGrid(allDestinations, destGrid, 'destination');
-        renderGrid(allAccommodations, accomGrid, 'accommodation');
+        renderGrid(allDestinations, destGrid, 'destination', initialLimit);
+        renderGrid(allAccommodations, accomGrid, 'accommodation', initialLimit);
         renderBlogGrid(blogData || []);
 
     } catch (error) {
@@ -166,7 +168,7 @@ function formatRupiah(number) {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(number);
 }
 
-function renderGrid(data, container, type) {
+function renderGrid(data, container, type, limit = null) {
     container.innerHTML = '';
 
     if (data.length === 0) {
@@ -174,7 +176,9 @@ function renderGrid(data, container, type) {
         return;
     }
 
-    data.forEach(item => {
+    const displayData = limit ? data.slice(0, limit) : data;
+
+    displayData.forEach(item => {
         const typeBadge = type === 'accommodation' ? `<div class="card-badge"><i class="fas fa-bed"></i> ${item.type}</div>` : '';
         const isAdded = tripPlan.some(t => t.id === item.id);
         const btnText = isAdded ? "Hapus dari Trip Plan" : "Tambah ke Trip Plan";
@@ -199,6 +203,21 @@ function renderGrid(data, container, type) {
         `;
         container.insertAdjacentHTML('beforeend', cardHTML);
     });
+
+    // Add "Lihat Selengkapnya" button if data > limit
+    if (limit && data.length > limit) {
+        const btnId = `see-more-${type}-${Math.random().toString(36).substr(2, 9)}`;
+        const btnWrapper = `
+            <div style="grid-column: 1/-1; text-align: center; margin-top: 3rem;">
+                <button id="${btnId}" class="btn-primary" style="display: inline-block; padding: 1rem 2rem; border-radius: 50px; background: transparent; color: var(--color-primary); border: 2px solid var(--color-primary); cursor: pointer; font-weight: 600;">Lihat Selengkapnya <i class="fas fa-chevron-down"></i></button>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', btnWrapper);
+
+        document.getElementById(btnId).addEventListener('click', () => {
+            renderGrid(data, container, type, null); // Render all
+        });
+    }
 }
 
 function renderBlogGrid(data) {
@@ -282,11 +301,12 @@ function setupFilterAction(e, data, gridContainer, type, filterContainer) {
     e.target.classList.add('active');
 
     const filterArea = e.target.getAttribute('data-filter');
+    const initialLimit = window.innerWidth < 768 ? 2 : 5;
     if (filterArea === 'all') {
-        renderGrid(data, gridContainer, type);
+        renderGrid(data, gridContainer, type, initialLimit);
     } else {
         const filtered = data.filter(item => item.area === filterArea);
-        renderGrid(filtered, gridContainer, type);
+        renderGrid(filtered, gridContainer, type, initialLimit);
     }
 }
 

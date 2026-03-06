@@ -776,6 +776,13 @@ footer {
     display: block;
   }
 
+  .hero {
+    padding-top: calc(var(--nav-height) + 4rem);
+    height: auto;
+    min-height: 100vh;
+    padding-bottom: 4rem;
+  }
+
   .hero-content-clean h1 {
     font-size: 3rem;
   }
@@ -792,5 +799,27 @@ footer {
 
   .hero-content-clean h1 {
     font-size: 2.5rem !important;
+  }
+
+  .hero-search-pill {
+    border-radius: 24px;
+    padding: 1.5rem;
+  }
+
+  #hero-search-form {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .search-input-inline {
+    width: 100%;
+    margin: 0;
+    padding: 0.8rem 1.2rem;
+  }
+
+  .btn-search-pill {
+    width: 100%;
+    margin-left: 0;
+    justify-content: center;
   }
 }
