@@ -190,12 +190,11 @@ function switchLanguage(lang) {
 }
 
 // Initial detection if no preference
+// We prioritize 'id' (Indonesian) for this specific business unless the user explicitly chose otherwise.
 if (!localStorage.getItem('fm_lang')) {
-    const browserLang = navigator.language.split('-')[0];
-    if (translations[browserLang]) {
-        currentLang = browserLang;
-        localStorage.setItem('fm_lang', currentLang);
-    }
+    // We default to ID. We skip auto-detection for now to ensure local users aren't served English unexpectedly.
+    currentLang = 'id';
+    localStorage.setItem('fm_lang', currentLang);
 }
 
 document.addEventListener('DOMContentLoaded', () => {

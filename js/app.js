@@ -34,11 +34,15 @@ const heroSearchForm = document.getElementById('hero-search-form');
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Language Change Support ---
+    // 1. Initial Data Fetch (Ensures data loads even if langChanged event is missed)
+    fetchData();
+
+    // 2. Language Change Support
     window.addEventListener('langChanged', () => {
         fetchData(); // Re-fetch or re-render
         updateTripUI(); // Update drawer text
     });
+
     setupEventListeners();
     loadTripPlanFromStorage();
 });
