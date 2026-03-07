@@ -132,7 +132,7 @@ window.openEditModal = function (id, targetGroup = null) {
         }
 
         getEl('entry-image-upload').value = '';
-        modal.style.display = 'block';
+        modal.style.display = 'flex';
 
     } catch (error) {
         console.error('Error in openEditModal:', error);
@@ -413,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const nameLbl = document.querySelector('label[for="entry-name"]');
             if (nameLbl) nameLbl.innerText = isBlog ? 'Judul Artikel' : (isArea ? 'Nama Area Baru' : 'Nama Tempat');
 
-            getEl('form-modal').style.display = 'block';
+            getEl('form-modal').style.display = 'flex';
         });
     }
 

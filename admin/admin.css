@@ -227,6 +227,7 @@ th {
 /* --- Modal Forms --- */
 .modal {
     display: none;
+    /* Will be set to 'flex' by JS */
     position: fixed;
     z-index: 2000;
     left: 0;
@@ -234,15 +235,20 @@ th {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
+    padding: 2rem;
+    align-items: flex-start;
+    justify-content: center;
 }
 
 .modal-content {
     background-color: white;
-    margin: 10% auto;
+    margin: 0;
+    /* Center handled by flex */
     padding: 2rem;
     border-radius: 12px;
-    width: 90%;
-    max-width: 500px;
+    width: 100%;
+    max-width: 600px;
     position: relative;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
