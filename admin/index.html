@@ -101,15 +101,33 @@
                     </div>
                     <div class="form-group">
                         <label>Text Pills / Badge</label>
-                        <input type="text" id="set-hero_badge" required>
+                        <input type="text" id="set-hero_badge" required placeholder="Contoh: Info Terbaru">
+                        <div class="translation-fields">
+                            <input type="text" id="set-hero_badge_en" placeholder="Badge in English (Optional)"
+                                style="margin-top: 5px;">
+                            <input type="text" id="set-hero_badge_ar" placeholder="الشارة بالعربية (اختياري)"
+                                style="margin-top: 5px; text-align: right;" dir="rtl">
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Title Hero</label>
                         <input type="text" id="set-hero_title" required>
+                        <div class="translation-fields">
+                            <input type="text" id="set-hero_title_en" placeholder="Title in English (Optional)"
+                                style="margin-top: 5px;">
+                            <input type="text" id="set-hero_title_ar" placeholder="العنوان بالعربية (اختياري)"
+                                style="margin-top: 5px; text-align: right;" dir="rtl">
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Sub Title Hero</label>
                         <textarea id="set-hero_subtitle" rows="4" required></textarea>
+                        <div class="translation-fields">
+                            <textarea id="set-hero_subtitle_en" rows="4" placeholder="Subtitle in English (Optional)"
+                                style="margin-top: 5px;"></textarea>
+                            <textarea id="set-hero_subtitle_ar" rows="4" placeholder="العنوان الفرعي بالعربية (اختياري)"
+                                style="margin-top: 5px; text-align: right;" dir="rtl"></textarea>
+                        </div>
                     </div>
                     <button type="submit" class="btn-primary" style="width: 100%;">Simpan Hero</button>
                 </form>
@@ -121,6 +139,13 @@
                     <div class="form-group">
                         <label>Deskripsi Footer</label>
                         <textarea id="set-footer_desc" rows="3" required></textarea>
+                        <div class="translation-fields">
+                            <textarea id="set-footer_desc_en" rows="3"
+                                placeholder="Footer Description in English (Optional)"
+                                style="margin-top: 5px;"></textarea>
+                            <textarea id="set-footer_desc_ar" rows="3" placeholder="وصف التذييل بالعربية (اختياري)"
+                                style="margin-top: 5px; text-align: right;" dir="rtl"></textarea>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Nomor WhatsApp CS (Gunakan format 08xxx)</label>

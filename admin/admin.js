@@ -313,11 +313,9 @@ function populateSettingsForms() {
         return s ? s.value : '';
     };
 
-    const ids = [
-        'set-web_name', 'set-admin_password', 'set-hero_badge', 'set-hero_title',
-        'set-hero_subtitle', 'set-hero_image', 'set-footer_desc', 'set-cs_whatsapp',
+    'set-web_name', 'set-admin_password', 'set-hero_badge', 'set-hero_badge_en', 'set-hero_badge_ar', 'set-hero_title',
+        'set-hero_title_en', 'set-hero_title_ar', 'set-hero_subtitle', 'set-hero_subtitle_en', 'set-hero_subtitle_ar', 'set-hero_image', 'set-footer_desc', 'set-footer_desc_en', 'set-footer_desc_ar', 'set-cs_whatsapp',
         'set-address', 'set-maps_embed'
-    ];
 
     ids.forEach(id => {
         const el = getEl(id);
@@ -550,7 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     setupSettingsForm('form-pengaturan', ['web_name', 'admin_password']);
-    setupSettingsForm('form-footer', ['footer_desc', 'cs_whatsapp', 'address', 'maps_embed']);
+    setupSettingsForm('form-footer', ['footer_desc', 'footer_desc_en', 'footer_desc_ar', 'cs_whatsapp', 'address', 'maps_embed']);
 
     // 8. Hero Form
     const hFrm = getEl('form-hero');
@@ -571,10 +569,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 const updates = [
                     { k: 'hero_image', v: url },
                     { k: 'hero_badge', v: getEl('set-hero_badge').value },
+                    { k: 'hero_badge_en', v: getEl('set-hero_badge_en').value },
+                    { k: 'hero_badge_ar', v: getEl('set-hero_badge_ar').value },
                     { k: 'hero_title', v: getEl('set-hero_title').value },
-                    { k: 'hero_subtitle', v: getEl('set-hero_subtitle').value }
+                    { k: 'hero_title_en', v: getEl('set-hero_title_en').value },
+                    { k: 'hero_title_ar', v: getEl('set-hero_title_ar').value },
+                    { k: 'hero_subtitle', v: getEl('set-hero_subtitle').value },
+                    { k: 'hero_subtitle_en', v: getEl('set-hero_subtitle_en').value },
+                    { k: 'hero_subtitle_ar', v: getEl('set-hero_subtitle_ar').value }
                 ];
-                for (const u of updates) await _supabase.from('fmidtour_settings').update({ value: u.v }).eq('key', u.k);
+                for (const u of updates) {
+                    const { data: exist } = await _supabase.from('fmidtour_settings').select('id').eq('key', u.k).single();
+                    if (exist) {
+                        await _supabase.from('fmidtour_settings').update({ value: u.v }).eq('key', u.k);
+                    } else {
+                        await _supabase.from('fmidtour_settings').insert([{ key: u.k, value: u.v }]);
+                    }
+                }
                 alert("Hero Updated!");
                 fetchData();
             } catch (ex) { alert("Error: " + ex.message); }
