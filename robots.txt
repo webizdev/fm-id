@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /assets/vendors/
+
+Sitemap: https://fm-id.webiz.my.id/sitemap.xml
