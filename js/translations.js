@@ -46,7 +46,23 @@ const translations = {
         btn_add_trip: "Tambah ke Trip Plan",
         btn_remove_trip: "Hapus dari Trip Plan",
         btn_back_blog: "Kembali ke Blog",
-        footer_copyright: "&copy; 2026 FM-ID Tour&Travel. All Rights Reserved."
+        footer_copyright: "&copy; 2026 FM-ID Tour&Travel. All Rights Reserved.",
+
+        loading_destinations: "Memuat data destinasi...",
+        loading_accommodations: "Memuat data akomodasi...",
+        loading_articles: "Memuat artikel...",
+        no_data_area: "Tidak ada data ditemukan untuk area ini.",
+        btn_see_more: "Lihat Selengkapnya",
+        no_articles: "Belum ada artikel yang diterbitkan.",
+        article_not_found_title: "Artikel tidak ditemukan",
+        article_not_found_desc: "Maaf, artikel yang Anda cari tidak tersedia.",
+
+        cat_destinasi: "Destinasi",
+        cat_tips_travel: "Tips Travel",
+        cat_kuliner: "Kuliner",
+        cat_berita: "Berita",
+        type_hotel: "Hotel",
+        type_villa: "Villa"
     },
     en: {
         nav_tamasya: "Sightseeing",
@@ -95,7 +111,23 @@ const translations = {
         btn_add_trip: "Add to Trip Plan",
         btn_remove_trip: "Remove from Trip Plan",
         btn_back_blog: "Back to Blog",
-        footer_copyright: "&copy; 2026 FM-ID Tour&Travel. All Rights Reserved."
+        footer_copyright: "&copy; 2026 FM-ID Tour&Travel. All Rights Reserved.",
+
+        loading_destinations: "Loading destinations...",
+        loading_accommodations: "Loading accommodations...",
+        loading_articles: "Loading articles...",
+        no_data_area: "No data found for this area.",
+        btn_see_more: "See More",
+        no_articles: "No articles published yet.",
+        article_not_found_title: "Article not found",
+        article_not_found_desc: "Sorry, the article you are looking for is not available.",
+
+        cat_destinasi: "Destination",
+        cat_tips_travel: "Travel Tips",
+        cat_kuliner: "Culinary",
+        cat_berita: "News",
+        type_hotel: "Hotel",
+        type_villa: "Villa"
     },
     ar: {
         nav_tamasya: "سياحة",
@@ -144,7 +176,23 @@ const translations = {
         btn_add_trip: "أضف إلى خطة الرحلة",
         btn_remove_trip: "حذف من خطة الرحلة",
         btn_back_blog: "العودة إلى المدونة",
-        footer_copyright: "&copy; 2026 FM-ID جولات وسفر. جميع الحقوق محفوظة."
+        footer_copyright: "&copy; 2026 FM-ID جولات وسفر. جميع الحقوق محفوظة.",
+
+        loading_destinations: "جاري تحميل الوجهات...",
+        loading_accommodations: "جاري تحميل أماكن الإقامة...",
+        loading_articles: "جاري تحميل المقالات...",
+        no_data_area: "لا توجد بيانات لهذه المنطقة.",
+        btn_see_more: "شاهد المزيد",
+        no_articles: "لم يتم نشر أي مقالات بعد.",
+        article_not_found_title: "المقال غير موجود",
+        article_not_found_desc: "عذراً، المقال الذي تبحث عنه غير متوفر.",
+
+        cat_destinasi: "وجهة",
+        cat_tips_travel: "نصائح السفر",
+        cat_kuliner: "الطبخ",
+        cat_berita: "أخبار",
+        type_hotel: "فندق",
+        type_villa: "فيلا"
     }
 };
 

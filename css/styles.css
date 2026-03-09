@@ -638,6 +638,10 @@ footer {
   color: rgba(255, 255, 255, 0.7);
 }
 
+.footer-col p.footer-desc {
+  display: block;
+}
+
 .footer-col p i {
   margin-top: 4px;
   min-width: 20px;

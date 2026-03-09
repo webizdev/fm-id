@@ -233,19 +233,24 @@ function formatRupiah(number) {
 
 function renderGrid(data, container, type, limit = null) {
     container.innerHTML = '';
+    const lang = localStorage.getItem('fm_lang') || 'id';
 
     if (data.length === 0) {
-        container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #6B7280;">Tidak ada data ditemukan untuk area ini.</div>`;
+        const noDataText = translations[lang] ? translations[lang].no_data_area : "Tidak ada data ditemukan untuk area ini.";
+        container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #6B7280;">${noDataText}</div>`;
         return;
     }
 
     const displayData = limit ? data.slice(0, limit) : data;
 
     displayData.forEach(item => {
-        const lang = localStorage.getItem('fm_lang') || 'id';
         const isAdded = tripPlan.some(t => t.id === item.id);
         const name = lang === 'en' ? (item.name_en || item.name) : (lang === 'ar' ? (item.name_ar || item.name) : item.name);
-        const itemTypeTranslated = lang === 'en' ? (item.type_en || item.type) : (lang === 'ar' ? (item.type_ar || item.type) : item.type);
+
+        let rawType = item.type;
+        let typeKey = 'type_' + rawType.toLowerCase().replace(/\s+/g, '_');
+        let fallbackType = translations[lang] && translations[lang][typeKey] ? translations[lang][typeKey] : rawType;
+        const itemTypeTranslated = lang === 'en' ? (item.type_en || fallbackType) : (lang === 'ar' ? (item.type_ar || fallbackType) : rawType);
 
         // Find area name translation
         const areaData = allAreas.find(a => a.name === item.area);
@@ -278,10 +283,11 @@ function renderGrid(data, container, type, limit = null) {
 
     // Add "Lihat Selengkapnya" button if data > limit
     if (limit && data.length > limit) {
+        const btnSeeMore = translations[lang] ? translations[lang].btn_see_more : "Lihat Selengkapnya";
         const btnId = `see-more-${type}-${Math.random().toString(36).substr(2, 9)}`;
         const btnWrapper = `
             <div style="grid-column: 1/-1; text-align: center; margin-top: 3rem;">
-                <button id="${btnId}" class="btn-primary" style="display: inline-block; padding: 1rem 2rem; border-radius: 50px; background: transparent; color: var(--color-primary); border: 2px solid var(--color-primary); cursor: pointer; font-weight: 600;">Lihat Selengkapnya <i class="fas fa-chevron-down"></i></button>
+                <button id="${btnId}" class="btn-primary" style="display: inline-block; padding: 1rem 2rem; border-radius: 50px; background: transparent; color: var(--color-primary); border: 2px solid var(--color-primary); cursor: pointer; font-weight: 600;">${btnSeeMore} <i class="fas fa-chevron-down"></i></button>
             </div>
         `;
         container.insertAdjacentHTML('beforeend', btnWrapper);
@@ -295,9 +301,11 @@ function renderGrid(data, container, type, limit = null) {
 function renderBlogGrid(data) {
     if (!blogGrid) return;
     blogGrid.innerHTML = '';
+    const lang = localStorage.getItem('fm_lang') || 'id';
 
     if (data.length === 0) {
-        blogGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #6B7280;">Belum ada artikel yang diterbitkan.</div>`;
+        const noArticlesText = translations[lang] ? translations[lang].no_articles : "Belum ada artikel yang diterbitkan.";
+        blogGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #6B7280;">${noArticlesText}</div>`;
         return;
     }
 
@@ -305,13 +313,21 @@ function renderBlogGrid(data) {
     const displayData = data.slice(0, 5);
 
     displayData.forEach(item => {
-        const lang = localStorage.getItem('fm_lang') || 'id';
         const title = lang === 'en' ? (item.title_en || item.title) : (lang === 'ar' ? (item.title_ar || item.title) : item.title);
         const excerpt = lang === 'en' ? (item.excerpt_en || item.excerpt) : (lang === 'ar' ? (item.excerpt_ar || item.excerpt) : item.excerpt);
-        const category = lang === 'en' ? (item.category_en || item.category) : (lang === 'ar' ? (item.category_ar || item.category) : item.category);
+
+        let rawCat = item.category || '';
+        let catKey = 'cat_' + rawCat.toLowerCase().replace(/\s+/g, '_');
+        let fallbackCat = translations[lang] && translations[lang][catKey] ? translations[lang][catKey] : rawCat;
+        const category = lang === 'en' ? (item.category_en || fallbackCat) : (lang === 'ar' ? (item.category_ar || fallbackCat) : fallbackCat);
+
         const btnReadMore = translations[lang] ? translations[lang].btn_read_more : "Baca Selengkapnya";
 
-        const date = new Date(item.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        let locale = 'id-ID';
+        if (lang === 'en') locale = 'en-US';
+        if (lang === 'ar') locale = 'ar-SA';
+        const date = new Date(item.created_at).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' });
+
         const cardHTML = `
             <div class="travel-card fade-in">
                 <div class="card-img-wrapper">
@@ -331,9 +347,10 @@ function renderBlogGrid(data) {
 
     // Add "Lihat Semua Artikel" button if data > 5
     if (data.length > 5) {
+        const btnSeeAll = translations[lang] ? translations[lang].btn_see_more : "Lihat Semua Artikel";
         const btnWrapper = `
             <div style="grid-column: 1/-1; text-align: center; margin-top: 3rem;">
-                <a href="blog.html" class="btn-primary" style="display: inline-block; padding: 1rem 2rem; border-radius: 50px; text-decoration: none;">Lihat Semua Artikel <i class="fas fa-chevron-right"></i></a>
+                <a href="blog.html" class="btn-primary" style="display: inline-block; padding: 1rem 2rem; border-radius: 50px; text-decoration: none;">${btnSeeAll} <i class="fas fa-chevron-right"></i></a>
             </div>
         `;
         blogGrid.insertAdjacentHTML('beforeend', btnWrapper);
@@ -613,7 +630,35 @@ function processFlightBooking(e) {
     const date = document.getElementById('flight-date').value;
     const pax = document.getElementById('flight-pax').value;
 
-    const message = `Halo Admin FM-ID Tour,%0A%0ASaya ingin memesan tiket pesawat dengan detail berikut:%0A%0A*Kota Asal:* ${origin}%0A*Kota Tujuan:* ${dest}%0A*Tanggal Berangkat:* ${date}%0A*Jumlah Penumpang:* ${pax} Orang%0A%0ATolong bantu carikan jadwal penerbangan terbaik dan estimasi harganya. Terima kasih!`;
+    const lang = localStorage.getItem('fm_lang') || 'id';
+
+    let intro = "Halo Admin FM-ID Tour,%0A%0ASaya ingin memesan tiket pesawat dengan detail berikut:";
+    let lblOrigin = "*Kota Asal:*";
+    let lblDest = "*Kota Tujuan:*";
+    let lblDate = "*Tanggal Berangkat:*";
+    let lblPax = "*Jumlah Penumpang:*";
+    let paxUnit = "Orang";
+    let outro = "Tolong bantu carikan jadwal penerbangan terbaik dan estimasi harganya. Terima kasih!";
+
+    if (lang === 'en') {
+        intro = "Hello FM-ID Tour Admin,%0A%0AI would like to book flight tickets with the following details:";
+        lblOrigin = "*Origin City:*";
+        lblDest = "*Destination City:*";
+        lblDate = "*Departure Date:*";
+        lblPax = "*Number of Passengers:*";
+        paxUnit = "Person(s)";
+        outro = "Please help me find the best flight schedule and price estimate. Thank you!";
+    } else if (lang === 'ar') {
+        intro = "مرحباً مسؤول FM-ID جولات وسفر،%0A%0Aأود حجز تذاكر طيران بالتفاصيل التالية:";
+        lblOrigin = "*مدينة المغادرة:*";
+        lblDest = "*مدينة الوصول:*";
+        lblDate = "*تاريخ المغادرة:*";
+        lblPax = "*عدد الركاب:*";
+        paxUnit = "أشخاص";
+        outro = "يرجى مساعدتي في العثور على أفضل جدول طيران وتقدير التكلفة. شكراً لك!";
+    }
+
+    const message = `${intro}%0A%0A${lblOrigin} ${origin}%0A${lblDest} ${dest}%0A${lblDate} ${date}%0A${lblPax} ${pax} ${paxUnit}%0A%0A${outro}`;
 
     const whatsappURL = `https://wa.me/${adminPhone}?text=${message}`;
     window.open(whatsappURL, '_blank');

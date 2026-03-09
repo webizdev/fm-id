@@ -94,7 +94,7 @@
             <!-- Data will be populated here via JS -->
             <div style="text-align: center; width: 100%; grid-column: 1 / -1; padding: 2rem;">
                 <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--color-primary)"></i>
-                <p style="margin-top: 1rem">Memuat data destinasi...</p>
+                <p style="margin-top: 1rem" data-i18n="loading_destinations">Memuat data destinasi...</p>
             </div>
         </div>
     </section>
@@ -116,7 +116,7 @@
             <!-- Data will be populated here via JS -->
             <div style="text-align: center; width: 100%; grid-column: 1 / -1; padding: 2rem;">
                 <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--color-primary)"></i>
-                <p style="margin-top: 1rem">Memuat data akomodasi...</p>
+                <p style="margin-top: 1rem" data-i18n="loading_accommodations">Memuat data akomodasi...</p>
             </div>
         </div>
     </section>
@@ -124,29 +124,33 @@
     <!-- Tiket Pesawat -->
     <section id="flights" style="background-color: var(--color-bg-light);">
         <div class="title-section">
-            <h2>Pemesanan Tiket Pesawat</h2>
-            <p>Isi formulir pengajuan di bawah ini untuk mencari tiket penerbangan terbaik.</p>
+            <h2 data-i18n="section_flights">Pemesanan Tiket Pesawat</h2>
+            <p data-i18n="section_flights_desc">Isi formulir pengajuan di bawah ini untuk mencari tiket penerbangan
+                terbaik.</p>
         </div>
 
         <div class="flight-form-container">
             <form id="flight-form">
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Kota Asal <i class="fas fa-plane-departure"></i></label>
+                        <label><span data-i18n="label_origin">Kota Asal</span> <i
+                                class="fas fa-plane-departure"></i></label>
                         <input type="text" id="flight-origin" required placeholder="Contoh: Jakarta (CGK)">
                     </div>
                     <div class="form-group">
-                        <label>Kota Tujuan <i class="fas fa-plane-arrival"></i></label>
+                        <label><span data-i18n="label_destination">Kota Tujuan</span> <i
+                                class="fas fa-plane-arrival"></i></label>
                         <input type="text" id="flight-dest" required placeholder="Contoh: Denpasar (DPS)">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Tanggal Keberangkatan <i class="fas fa-calendar-alt"></i></label>
+                        <label><span data-i18n="label_date">Tanggal Keberangkatan</span> <i
+                                class="fas fa-calendar-alt"></i></label>
                         <input type="date" id="flight-date" required>
                     </div>
                     <div class="form-group">
-                        <label>Jumlah Penumpang <i class="fas fa-users"></i></label>
+                        <label><span data-i18n="label_pax">Jumlah Penumpang</span> <i class="fas fa-users"></i></label>
                         <input type="number" id="flight-pax" min="1" max="10" value="1" required>
                     </div>
                 </div>
@@ -178,7 +182,8 @@
         <div class="footer-content">
             <div class="footer-col">
                 <div class="footer-logo" id="dyn-footer-logo">FM-ID Tour&Travel</div>
-                <p id="dyn-footer-desc">Spesialis penyedia pengalaman liburan premium dan terpercaya untuk area Jakarta,
+                <p id="dyn-footer-desc" class="footer-desc">Spesialis penyedia pengalaman liburan premium dan terpercaya
+                    untuk area Jakarta,
                     Bandung, Puncak, dan
                     Bali.</p>
             </div>
@@ -205,7 +210,7 @@
                 </div>
             </div>
         </div>
-        <div class="footer-bottom">
+        <div class="footer-bottom" data-i18n="footer_copyright">
             &copy; 2026 FM-ID Tour&Travel. All rights reserved.
         </div>
     </footer>
@@ -225,11 +230,12 @@
         </div>
         <div class="drawer-body" id="trip-items-container">
             <!-- Items dynamically injected here -->
-            <div class="empty-state">Belum ada destinasi atau akomodasi yang dipilih.</div>
+            <div class="empty-state" data-i18n="trip_plan_empty">Belum ada destinasi atau akomodasi yang dipilih.</div>
         </div>
         <div class="drawer-footer">
-            <button id="checkout-whatsapp" class="btn-primary" style="width: 100%; display:none;">Kirim Rencana ke
-                WhatsApp <i class="fab fa-whatsapp"></i></button>
+            <button id="checkout-whatsapp" class="btn-primary" style="width: 100%; display:none;"><span
+                    data-i18n="btn_send_whatsapp">Kirim Rencana ke WhatsApp</span> <i
+                    class="fab fa-whatsapp"></i></button>
         </div>
     </div>
     <div id="drawer-overlay" class="drawer-overlay"></div>

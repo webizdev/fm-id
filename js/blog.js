@@ -73,20 +73,30 @@ async function fetchAllArticles() {
         if (error) throw error;
 
         blogGrid.innerHTML = '';
+        const lang = localStorage.getItem('fm_lang') || 'id';
         if (data.length === 0) {
-            blogGrid.innerHTML = '<p>Belum ada artikel.</p>';
+            const noArticlesText = translations[lang] ? translations[lang].no_articles : "Belum ada artikel yang diterbitkan.";
+            blogGrid.innerHTML = `<p>${noArticlesText}</p>`;
             return;
         }
 
-        const lang = localStorage.getItem('fm_lang') || 'id';
 
         data.forEach(item => {
             const title = lang === 'en' ? (item.title_en || item.title) : (lang === 'ar' ? (item.title_ar || item.title) : item.title);
             const excerpt = lang === 'en' ? (item.excerpt_en || item.excerpt) : (lang === 'ar' ? (item.excerpt_ar || item.excerpt) : item.excerpt);
-            const category = lang === 'en' ? (item.category_en || item.category) : (lang === 'ar' ? (item.category_ar || item.category) : item.category);
+
+            let rawCat = item.category || '';
+            let catKey = 'cat_' + rawCat.toLowerCase().replace(/\s+/g, '_');
+            let fallbackCat = translations[lang] && translations[lang][catKey] ? translations[lang][catKey] : rawCat;
+            const category = lang === 'en' ? (item.category_en || fallbackCat) : (lang === 'ar' ? (item.category_ar || fallbackCat) : fallbackCat);
+
             const btnText = translations[lang] ? translations[lang].btn_read_more : "Baca Selengkapnya";
 
-            const date = new Date(item.created_at).toLocaleDateString(lang === 'ar' ? 'ar-SA' : (lang === 'en' ? 'en-US' : 'id-ID'), { day: 'numeric', month: 'long', year: 'numeric' });
+            let locale = 'id-ID';
+            if (lang === 'en') locale = 'en-US';
+            if (lang === 'ar') locale = 'ar-SA';
+            const date = new Date(item.created_at).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' });
+
             const cardHTML = `
                 <div class="travel-card fade-in">
                     <div class="card-img-wrapper">
@@ -123,7 +133,11 @@ async function fetchArticleDetail(slug) {
         const title = lang === 'en' ? (data.title_en || data.title) : (lang === 'ar' ? (data.title_ar || data.title) : data.title);
         const content = lang === 'en' ? (data.content_en || data.content) : (lang === 'ar' ? (data.content_ar || data.content) : data.content);
         const excerpt = lang === 'en' ? (data.excerpt_en || data.excerpt) : (lang === 'ar' ? (data.excerpt_ar || data.excerpt) : data.excerpt);
-        const category = lang === 'en' ? (data.category_en || data.category) : (lang === 'ar' ? (data.category_ar || data.category) : data.category);
+
+        let rawCat = data.category || '';
+        let catKey = 'cat_' + rawCat.toLowerCase().replace(/\s+/g, '_');
+        let fallbackCat = translations[lang] && translations[lang][catKey] ? translations[lang][catKey] : rawCat;
+        const category = lang === 'en' ? (data.category_en || fallbackCat) : (lang === 'ar' ? (data.category_ar || fallbackCat) : fallbackCat);
 
         // Update SEO
         document.title = `${title} | FM-ID Tour&Travel`;
@@ -131,27 +145,38 @@ async function fetchArticleDetail(slug) {
         if (metaDesc) metaDesc.setAttribute('content', excerpt);
 
         // Render Content
-        const date = new Date(data.created_at).toLocaleDateString(lang === 'ar' ? 'ar-SA' : (lang === 'en' ? 'en-US' : 'id-ID'), { day: 'numeric', month: 'long', year: 'numeric' });
+        let locale = 'id-ID';
+        if (lang === 'en') locale = 'en-US';
+        if (lang === 'ar') locale = 'ar-SA';
+        const date = new Date(data.created_at).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' });
 
         document.getElementById('article-title').innerText = title;
         const metaBadge = document.getElementById('article-meta-badge');
         if (metaBadge) metaBadge.innerText = category;
 
+        const adminText = lang === 'ar' ? 'مسؤول FM-ID' : 'Admin FM-ID';
+        const authorName = data.author || adminText;
+
         const metaText = document.getElementById('article-meta-text');
-        if (metaText) metaText.innerHTML = `<i class="fas fa-calendar-alt"></i> ${date} &nbsp; | &nbsp; <i class="fas fa-user"></i> ${data.author || 'Admin'}`;
+        if (metaText) metaText.innerHTML = `<i class="fas fa-calendar-alt"></i> ${date} &nbsp; | &nbsp; <i class="fas fa-user"></i> ${authorName}`;
 
         document.getElementById('article-hero-img').src = data.image;
         document.getElementById('article-content').innerHTML = content;
 
     } catch (err) {
         console.error('Error:', err);
+        const lang = localStorage.getItem('fm_lang') || 'id';
+        const titleNotFound = translations[lang] ? translations[lang].article_not_found_title : "Artikel tidak ditemukan";
+        const descNotFound = translations[lang] ? translations[lang].article_not_found_desc : "Maaf, artikel yang Anda cari tidak tersedia.";
+        const btnBackBlog = translations[lang] ? translations[lang].btn_back_blog : "Kembali ke Blog";
+
         const container = document.getElementById('article-container');
         if (container) {
             container.innerHTML = `
                 <div style="text-align:center; padding: 5rem 2rem;">
-                    <h2>Artikel tidak ditemukan / Article not found</h2>
-                    <p>Maaf, artikel yang Anda cari tidak tersedia. / Sorry, the article you are looking for is not available.</p>
-                    <a href="blog.html" class="btn-primary" style="margin-top: 2rem; display:inline-block;">Kembali ke Blog</a>
+                    <h2>${titleNotFound}</h2>
+                    <p>${descNotFound}</p>
+                    <a href="blog.html" class="btn-primary" style="margin-top: 2rem; display:inline-block;">${btnBackBlog}</a>
                 </div>
             `;
         }
