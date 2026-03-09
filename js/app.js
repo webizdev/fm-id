@@ -123,9 +123,22 @@ function showError(container, message) {
 
 // --- APPLY SETTINGS TO DOM ---
 function applySettingsToDOM() {
+    const lang = localStorage.getItem('fm_lang') || 'id';
+
     const getVal = (key) => {
         const setting = siteSettings.find(s => s.key === key);
         return setting ? setting.value : '';
+    };
+
+    const getTranslatedVal = (baseKey) => {
+        if (lang === 'en') {
+            const enVal = getVal(baseKey + '_en');
+            if (enVal) return enVal;
+        } else if (lang === 'ar') {
+            const arVal = getVal(baseKey + '_ar');
+            if (arVal) return arVal;
+        }
+        return getVal(baseKey);
     };
 
     // Update Text Logic
@@ -150,15 +163,15 @@ function applySettingsToDOM() {
         if (heroBgEl) heroBgEl.src = heroImg;
     }
 
-    const badgeText = getVal('hero_badge');
+    const badgeText = getTranslatedVal('hero_badge');
     if (badgeText) {
         updateHTML('dyn-hero-badge', `<i class="fas fa-sparkles"></i> ${badgeText}`);
     }
-    updateText('dyn-hero-title', getVal('hero_title'));
-    updateText('dyn-hero-subtitle', getVal('hero_subtitle'));
+    updateText('dyn-hero-title', getTranslatedVal('hero_title'));
+    updateText('dyn-hero-subtitle', getTranslatedVal('hero_subtitle'));
 
     // Footer
-    updateText('dyn-footer-desc', getVal('footer_desc'));
+    updateText('dyn-footer-desc', getTranslatedVal('footer_desc'));
 
     const waRaw = getVal('cs_whatsapp');
     if (waRaw) {
