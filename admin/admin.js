@@ -316,7 +316,7 @@ function populateSettingsForms() {
     const ids = [
         'set-web_name', 'set-admin_password', 'set-hero_badge', 'set-hero_badge_en', 'set-hero_badge_ar', 'set-hero_title',
         'set-hero_title_en', 'set-hero_title_ar', 'set-hero_subtitle', 'set-hero_subtitle_en', 'set-hero_subtitle_ar', 'set-hero_image', 'set-footer_desc', 'set-footer_desc_en', 'set-footer_desc_ar', 'set-cs_whatsapp',
-        'set-address', 'set-maps_embed'
+        'set-address', 'set-cs_email', 'set-maps_embed', 'set-social_instagram', 'set-social_tiktok', 'set-social_snapchat'
     ];
 
     ids.forEach(id => {
@@ -550,7 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     setupSettingsForm('form-pengaturan', ['web_name', 'admin_password']);
-    setupSettingsForm('form-footer', ['footer_desc', 'footer_desc_en', 'footer_desc_ar', 'cs_whatsapp', 'address', 'maps_embed']);
+    setupSettingsForm('form-footer', ['footer_desc', 'footer_desc_en', 'footer_desc_ar', 'cs_whatsapp', 'cs_email', 'address', 'maps_embed', 'social_instagram', 'social_tiktok', 'social_snapchat']);
 
     // 8. Hero Form
     const hFrm = getEl('form-hero');

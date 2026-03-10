@@ -192,6 +192,29 @@ function applySettingsToDOM() {
         }
     }
 
+    const emailRaw = getVal('cs_email');
+    if (emailRaw) {
+        updateText('dyn-footer-email', emailRaw);
+    }
+
+    const igRaw = getVal('social_instagram');
+    const igIcon = document.getElementById('dyn-footer-ig');
+    if (igIcon && igRaw) {
+        igIcon.href = igRaw;
+    }
+
+    const tiktokRaw = getVal('social_tiktok');
+    const tiktokIcon = document.getElementById('dyn-footer-tiktok');
+    if (tiktokIcon && tiktokRaw) {
+        tiktokIcon.href = tiktokRaw;
+    }
+
+    const snapchatRaw = getVal('social_snapchat');
+    const snapIcon = document.getElementById('dyn-footer-snapchat');
+    if (snapIcon && snapchatRaw) {
+        snapIcon.href = snapchatRaw;
+    }
+
     updateText('dyn-footer-address', getVal('address'));
 
     const mapsEmbed = getVal('maps_embed');

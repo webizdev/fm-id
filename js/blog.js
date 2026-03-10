@@ -37,23 +37,91 @@ async function updateNavWhatsApp() {
     try {
         const { data, error } = await _supabase
             .from('fmidtour_settings')
-            .select('value')
-            .eq('key', 'cs_whatsapp')
-            .single();
+            .select('*');
 
         if (error) throw error;
-        if (data && data.value) {
-            let waRaw = data.value;
-            let formatted = waRaw.replace(/\D/g, '');
-            if (formatted.startsWith('0')) {
-                formatted = '62' + formatted.substring(1);
+
+        if (data) {
+            const getVal = (key) => {
+                const setting = data.find(s => s.key === key);
+                return setting ? setting.value : '';
+            };
+
+            // WhatsApp Nav & Footer
+            let waRaw = getVal('cs_whatsapp');
+            if (waRaw) {
+                let formatted = waRaw.replace(/\D/g, '');
+                if (formatted.startsWith('0')) {
+                    formatted = '62' + formatted.substring(1);
+                }
+                const lang = localStorage.getItem('fm_lang') || 'id';
+                const msg = lang === 'ar' ? "مرحباً، أود الاستفسار عن جولة..." : (lang === 'en' ? "Hello admin, I'd like to ask about tour & travel to.." : "Halo admin, saya mau bertanya tentang tour & travel ke..");
+                const encodedMsg = encodeURIComponent(msg);
+                navContact.href = `https://wa.me/${formatted}?text=${encodedMsg}`;
+                navContact.target = "_blank";
+
+                const footerWa = document.getElementById('dyn-footer-wa');
+                if (footerWa) footerWa.innerText = waRaw;
             }
-            // Use translation for WhatsApp message if desired
+
+            // Email Footer
+            const emailRaw = getVal('cs_email');
+            const footerEmail = document.getElementById('dyn-footer-email');
+            if (footerEmail && emailRaw) {
+                footerEmail.innerText = emailRaw;
+            }
+
+            // Address Footer
+            const addressRaw = getVal('address');
+            const footerAddress = document.getElementById('dyn-footer-address');
+            if (footerAddress && addressRaw) {
+                footerAddress.innerText = addressRaw;
+            }
+
+            // Desc Footer
             const lang = localStorage.getItem('fm_lang') || 'id';
-            const msg = lang === 'ar' ? "مرحباً، أود الاستفسار عن جولة..." : (lang === 'en' ? "Hello admin, I'd like to ask about tour & travel to.." : "Halo admin, saya mau bertanya tentang tour & travel ke..");
-            const encodedMsg = encodeURIComponent(msg);
-            navContact.href = `https://wa.me/${formatted}?text=${encodedMsg}`;
-            navContact.target = "_blank";
+            const getTranslatedVal = (baseKey) => {
+                if (lang === 'en') {
+                    const enVal = getVal(baseKey + '_en');
+                    if (enVal) return enVal;
+                } else if (lang === 'ar') {
+                    const arVal = getVal(baseKey + '_ar');
+                    if (arVal) return arVal;
+                }
+                return getVal(baseKey);
+            };
+
+            const descRaw = getTranslatedVal('footer_desc');
+            const footerDesc = document.querySelector('.footer-desc');
+            if (footerDesc && descRaw) {
+                footerDesc.innerText = descRaw;
+            }
+
+            // Maps Footer
+            const mapsRaw = getVal('maps_embed');
+            const footerMaps = document.getElementById('dyn-footer-maps');
+            if (footerMaps && mapsRaw) {
+                footerMaps.innerHTML = mapsRaw;
+            }
+
+            // Social Media Footer
+            const igRaw = getVal('social_instagram');
+            const igIcon = document.getElementById('dyn-footer-ig');
+            if (igIcon && igRaw) {
+                igIcon.href = igRaw;
+            }
+
+            const tiktokRaw = getVal('social_tiktok');
+            const tiktokIcon = document.getElementById('dyn-footer-tiktok');
+            if (tiktokIcon && tiktokRaw) {
+                tiktokIcon.href = tiktokRaw;
+            }
+
+            const snapchatRaw = getVal('social_snapchat');
+            const snapIcon = document.getElementById('dyn-footer-snapchat');
+            if (snapIcon && snapchatRaw) {
+                snapIcon.href = snapchatRaw;
+            }
         }
     } catch (err) {
         console.error('Error updating nav WA link:', err);
