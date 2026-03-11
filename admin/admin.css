@@ -6,6 +6,8 @@
     --color-bg: #F3F4F6;
     --color-sidebar: #092c2a;
     --color-text: #1F2937;
+    --border-radius-md: 12px;
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
     --transition: all 0.3s ease;
 }
 
@@ -148,6 +150,24 @@ body {
     width: 100%;
 }
 
+.btn-outline-white {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.8rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 600;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-outline-white:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: white;
+}
+
 .logout-btn:hover {
     background: #EF4444;
     color: white;
@@ -243,8 +263,7 @@ th {
 
 .modal-content {
     background-color: white;
-    margin: 0;
-    /* Center handled by flex */
+    margin: auto; /* Ensure it centers when smaller than viewport, but scrollable if larger */
     padding: 2rem;
     border-radius: 12px;
     width: 100%;
@@ -274,10 +293,27 @@ th {
 }
 
 .form-group input,
-.form-group select {
+.form-group select,
+.form-group textarea {
     width: 100%;
     padding: 0.8rem;
     border: 1px solid #D1D5DB;
     border-radius: 6px;
     font-family: inherit;
+    resize: vertical;
+}
+
+/* --- Translation Fields Group --- */
+.translation-fields {
+    background: #F9FAFB;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px dashed #D1D5DB;
+    margin-top: 0.5rem;
+}
+
+.translation-fields input,
+.translation-fields textarea {
+    margin-top: 0.5rem;
+    background: white;
 }

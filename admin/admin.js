@@ -115,12 +115,12 @@ window.openEditModal = function (id, targetGroup = null) {
             }
         }
         if (groupBlog) groupBlog.style.display = isBlog ? 'block' : 'none';
-        if (pField) pField.style.display = (isBlog || isArea) ? 'none' : 'block';
+        if (pField) pField.style.display = 'none';
         if (aField) aField.style.display = (isBlog || isArea) ? 'none' : 'block';
         if (iField) iField.style.display = isArea ? 'none' : 'block';
 
         // Toggle Required
-        if (priceInput) priceInput.required = !(isBlog || isArea);
+        if (priceInput) priceInput.required = false;
         if (areaInput) areaInput.required = !(isBlog || isArea);
         if (imageInput) imageInput.required = !isArea;
 
@@ -221,12 +221,10 @@ function renderTable() {
     }
 
     items.forEach(item => {
-        const price = item.price ? parseInt(item.price).toLocaleString('id-ID') : '0';
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td><strong>${item.name || '-'}</strong><br><small style="color:#aaa;">${item.image || ''}</small></td>
             <td>${item.area || '-'}</td>
-            <td>Rp ${price}</td>
             <td>${item.type || '-'}</td>
             <td>
                 <button class="action-btn btn-edit" onclick="openEditModal('${item.id}')"><i class="fas fa-edit"></i></button>
@@ -299,7 +297,23 @@ function populateAreaDropdowns() {
     def.innerText = '-- Pilih Area --';
     areaSelect.appendChild(def);
 
-    currentData.areas.forEach(area => {
+    // Define custom ordering
+    const orderMap = {
+        'Puncak': 1,
+        'Bandung': 2,
+        'Bali': 3,
+        'Jakarta': 4
+    };
+
+    // Sort areas based on custom order map
+    const sortedAreas = [...currentData.areas].sort((a, b) => {
+        const orderA = orderMap[a.name] || 999;
+        const orderB = orderMap[b.name] || 999;
+        if (orderA !== orderB) return orderA - orderB;
+        return a.name.localeCompare(b.name);
+    });
+
+    sortedAreas.forEach(area => {
         const opt = document.createElement('option');
         opt.value = area.name;
         opt.innerText = area.name;
@@ -386,8 +400,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const imageInput = getEl('entry-image');
 
             if (priceInput) {
-                priceInput.closest('.form-group').style.display = (isBlog || isArea) ? 'none' : 'block';
-                priceInput.required = !(isBlog || isArea);
+                priceInput.closest('.form-group').style.display = 'none';
+                priceInput.required = false;
             }
             if (areaInput) {
                 areaInput.closest('.form-group').style.display = (isBlog || isArea) ? 'none' : 'block';

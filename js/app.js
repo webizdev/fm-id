@@ -228,9 +228,25 @@ function populateAreasUI() {
     const searchDest = document.getElementById('search-dest');
     const areaSuggestions = document.getElementById('area-suggestions');
 
+    // Define custom ordering
+    const orderMap = {
+        'Puncak': 1,
+        'Bandung': 2,
+        'Bali': 3,
+        'Jakarta': 4
+    };
+
+    // Sort allAreas based on custom order map, falling back to name for others
+    const sortedAreas = [...allAreas].sort((a, b) => {
+        const orderA = orderMap[a.name] || 999;
+        const orderB = orderMap[b.name] || 999;
+        if (orderA !== orderB) return orderA - orderB;
+        return a.name.localeCompare(b.name);
+    });
+
     if (areaSuggestions) {
         areaSuggestions.innerHTML = '';
-        allAreas.forEach(area => {
+        sortedAreas.forEach(area => {
             const option = document.createElement('option');
             option.value = area.name;
             areaSuggestions.appendChild(option);
@@ -245,7 +261,7 @@ function populateAreasUI() {
         container.innerHTML = '';
         if (allBtn) container.appendChild(allBtn);
 
-        allAreas.forEach(area => {
+        sortedAreas.forEach(area => {
             const lang = localStorage.getItem('fm_lang') || 'id';
             const areaNameTranslated = lang === 'en' ? (area.name_en || area.name) : (lang === 'ar' ? (area.name_ar || area.name) : area.name);
 
@@ -262,10 +278,6 @@ function populateAreasUI() {
 }
 
 // --- RENDERING ---
-function formatRupiah(number) {
-    if (number === 0) return "Gratis / Hubungi Admin";
-    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(number);
-}
 
 function renderGrid(data, container, type, limit = null) {
     container.innerHTML = '';
@@ -307,7 +319,6 @@ function renderGrid(data, container, type, limit = null) {
                 </div>
                 <div class="card-body">
                     <h3>${name}</h3>
-                    <div class="card-price">${formatRupiah(item.price)}</div>
                     <button class="${btnClass}" style="${btnStyle}" onclick="toggleTripItem('${item.id}', '${type}')" id="btn-${item.id}">
                         ${btnText}
                     </button>
@@ -524,7 +535,6 @@ function updateTripUI() {
                 <div class="trip-item-details">
                     <div class="trip-item-title">${name}</div>
                     <div class="trip-item-area"><i class="fas ${icon}"></i> ${areaNameTranslated}</div>
-                    <div class="trip-item-price">${formatRupiah(item.price)}</div>
                 </div>
                 <button class="remove-item" onclick="toggleTripItem('${item.id}', '${item.itemType.includes('Tamasya') ? 'destination' : 'accommodation'}')">
                     <i class="fas fa-trash"></i>
