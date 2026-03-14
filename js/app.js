@@ -7,6 +7,7 @@ const _supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 let allDestinations = [];
 let allAccommodations = [];
 let allAreas = [];
+let allTransport = [];
 let siteSettings = [];
 let tripPlan = [];
 let adminPhone = "6282215197172";
@@ -89,10 +90,17 @@ async function fetchData() {
             .select('*')
             .order('name');
 
-        if (destError || accomError || settingsError || blogError || areasError) {
-            console.error('Supabase fetch error:', destError || accomError || settingsError || blogError || areasError);
+        // Fetch transportasi
+        const { data: transportData, error: transportError } = await _supabase
+            .from('fmidtour_transportasi')
+            .select('*')
+            .order('created_at');
+
+        if (destError || accomError || settingsError || blogError || areasError || transportError) {
+            console.error('Supabase fetch error:', destError || accomError || settingsError || blogError || areasError || transportError);
             showError(destGrid, "Gagal memuat destinasi.");
             showError(accomGrid, "Gagal memuat akomodasi.");
+            showError(document.getElementById('transport-grid'), "Gagal memuat transportasi.");
             return;
         }
 
@@ -101,6 +109,7 @@ async function fetchData() {
         allDestinations = destData || [];
         allAccommodations = accomData || [];
         allAreas = areasData || [];
+        allTransport = transportData || [];
         siteSettings = settingsData || [];
 
         applySettingsToDOM();
@@ -108,12 +117,14 @@ async function fetchData() {
         renderGrid(allDestinations, destGrid, 'destination', initialLimit);
         renderGrid(allAccommodations, accomGrid, 'accommodation', initialLimit);
         renderBlogGrid(blogData || []);
+        renderTransportGrid();
 
     } catch (error) {
         console.error('Error fetching data from Supabase:', error);
         showError(destGrid, "Gagal memuat destinasi. Pastikan koneksi internet stabil.");
         showError(accomGrid, "Gagal memuat akomodasi.");
         showError(blogGrid, "Gagal memuat artikel blog.");
+        showError(document.getElementById('transport-grid'), "Gagal memuat transportasi.");
     }
 }
 
@@ -402,6 +413,41 @@ function renderBlogGrid(data) {
         `;
         blogGrid.insertAdjacentHTML('beforeend', btnWrapper);
     }
+}
+
+function renderTransportGrid() {
+    const transportGrid = document.getElementById('transport-grid');
+    if (!transportGrid) return;
+    transportGrid.innerHTML = '';
+    const lang = localStorage.getItem('fm_lang') || 'id';
+
+    if (allTransport.length === 0) {
+        transportGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #6B7280;">Tidak ada data transportasi.</div>`;
+        return;
+    }
+
+    allTransport.forEach(item => {
+        const title = lang === 'en' ? (item.name_en || item.name) : (lang === 'ar' ? (item.name_ar || item.name) : item.name);
+        const typeRaw = lang === 'en' ? (item.type_en || item.type) : (lang === 'ar' ? (item.type_ar || item.type) : item.type);
+        const description = lang === 'en' ? (item.description_en || item.description) : (lang === 'ar' ? (item.description_ar || item.description) : item.description);
+        
+        const btnBookNow = lang === 'en' ? 'Book Now' : (lang === 'ar' ? 'احجز الآن' : 'Pesan Sekarang');
+
+        const cardHTML = `
+            <div class="travel-card fade-in">
+                <div class="card-img-wrapper">
+                    <img src="${item.image}" alt="${title}" onerror="this.src='https://via.placeholder.com/400x300?text=Transport'">
+                    <div class="card-badge">${typeRaw}</div>
+                </div>
+                <div class="card-body">
+                    <h3 style="margin-bottom: 0.5rem; line-height: 1.3;">${title}</h3>
+                    <p style="color: #6B7280; font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.5;">${description}</p>
+                    <a href="javascript:void(0)" onclick="processTransportBooking('${item.name}')" class="btn-add-trip" style="text-align: center; display: inline-block; text-decoration: none; width: 100%;">${btnBookNow}</a>
+                </div>
+            </div>
+        `;
+        transportGrid.insertAdjacentHTML('beforeend', cardHTML);
+    });
 }
 
 // --- FILTERING ---
@@ -709,3 +755,23 @@ function processFlightBooking(e) {
     const whatsappURL = `https://wa.me/${adminPhone}?text=${message}`;
     window.open(whatsappURL, '_blank');
 }
+
+function processTransportBooking(unitName) {
+    const lang = localStorage.getItem('fm_lang') || 'id';
+
+    let intro = "Halo Admin FM-ID Tour,%0A%0AMohon info lebih detail untuk pemesanan unit transportasi:";
+    let outro = "Tolong berikan informasi harga dan ketersediaannya. Terima kasih!";
+
+    if (lang === 'en') {
+        intro = "Hello FM-ID Tour Admin,%0A%0AI would like more detailed information for booking the following transport unit:";
+        outro = "Please provide price information and availability. Thank you!";
+    } else if (lang === 'ar') {
+        intro = "مرحباً مسؤول FM-ID جولات وسفر،%0A%0Aأود الحصول على مزيد من المعلومات التفصيلية لحجز وحدة النقل التالية:";
+        outro = "يرجى تقديم معلومات السعر ومدى التوفر. شكراً لك!";
+    }
+
+    const message = `${intro}%0A*${unitName}*%0A%0A${outro}`;
+    const whatsappURL = `https://wa.me/${adminPhone}?text=${message}`;
+    window.open(whatsappURL, '_blank');
+}
+

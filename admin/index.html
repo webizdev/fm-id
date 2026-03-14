@@ -29,8 +29,9 @@
         <aside class="sidebar">
             <div class="sidebar-logo">FM-ID <span>Admin</span></div>
             <ul class="nav-menu">
-                <li class="active" data-view="destinations"><i class="fas fa-map-marked-alt"></i> Kelola Destinasi</li>
-                <li data-view="accommodations"><i class="fas fa-bed"></i> Kelola Akomodasi</li>
+                <li data-view="destinations"><i class="fas fa-map-marked-alt"></i> Kelola Destinasi</li>
+                <li class="active" data-view="accommodations"><i class="fas fa-bed"></i> Kelola Akomodasi</li>
+                <li data-view="transport"><i class="fas fa-car"></i> Kelola Transportasi</li>
                 <li data-view="areas"><i class="fas fa-map-marker-alt"></i> Kelola Area</li>
                 <li
                     style="margin-top:20px; font-size:0.8rem; color:#aaa; text-transform:uppercase; pointer-events:none;">
@@ -210,6 +211,24 @@
                 </div>
             </div>
 
+            <div id="transport-container" class="settings-container" style="display:none;">
+                <div class="table-container">
+                    <table id="transport-table">
+                        <thead>
+                            <tr>
+                                <th>Nama Unit</th>
+                                <th>Tipe</th>
+                                <th>Harga</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transport-table-body">
+                            <!-- Transport rows injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <div id="loading-indicator" style="text-align:center; padding: 2rem;">
                 <i class="fas fa-spinner fa-spin fa-2x"></i> Memuat Data...
             </div>
@@ -295,7 +314,8 @@
                             <textarea id="entry-excerpt-en" rows="2" placeholder="Excerpt in English (Optional)"
                                 style="margin-top: 5px;"></textarea>
                             <textarea id="entry-excerpt-ar" rows="2" placeholder="الملخص بالعربية (اختياري)"
-                                style="margin-top: 5px; text-align: right;" dir="rtl"></textarea>
+                                style="margin-top: 5px; text-align: right;" dir="rtl">
+                            </textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -308,6 +328,18 @@
                             <textarea id="entry-content-ar" rows="10" placeholder="المحتوى بالعربية (اختياري)"
                                 style="margin-top: 5px; text-align: right;" dir="rtl"></textarea>
                         </div>
+                    </div>
+                </div>
+
+                <div class="form-group" id="group-transport-desc" style="display:none;">
+                    <label>Deskripsi Singkat / Kapasitas</label>
+                    <textarea id="entry-transport-desc" rows="2" placeholder="Contoh: Kapasitas 4-5 Orang"></textarea>
+                    <!-- Translations -->
+                    <div class="translation-fields">
+                        <textarea id="entry-transport-desc-en" rows="2" placeholder="Description in English (Optional)"
+                            style="margin-top: 5px;"></textarea>
+                        <textarea id="entry-transport-desc-ar" rows="2" placeholder="الوصف بالعربية (اختياري)"
+                            style="margin-top: 5px; text-align: right;" dir="rtl"></textarea>
                     </div>
                 </div>
 

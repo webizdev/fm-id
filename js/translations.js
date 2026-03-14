@@ -4,6 +4,7 @@ const translations = {
         nav_accommodations: "Hotel & Villa",
         nav_blog: "Blog",
         nav_flights: "Tiket Pesawat",
+        nav_transport: "Transportasi",
         nav_contact: "Hubungi Kami",
 
         hero_badge: "PAKAR TOUR & TRAVEL",
@@ -24,6 +25,8 @@ const translations = {
 
         section_flights: "Pemesanan Tiket Pesawat",
         section_flights_desc: "Isi formulir pengajuan di bawah ini untuk mencari tiket penerbangan terbaik.",
+        section_transport: "Layanan Transportasi",
+        section_transport_desc: "Kami menyediakan berbagai mode transportasi untuk kenyamanan liburan Anda.",
         label_origin: "Kota Asal",
         label_destination: "Kota Tujuan",
         label_date: "Tanggal Keberangkatan",
@@ -69,6 +72,7 @@ const translations = {
         nav_accommodations: "Hotels & Villas",
         nav_blog: "Blog",
         nav_flights: "Flight Tickets",
+        nav_transport: "Transportation",
         nav_contact: "Contact Us",
 
         hero_badge: "EXPERT TOUR & TRAVEL",
@@ -89,6 +93,8 @@ const translations = {
 
         section_flights: "Flight Ticket Booking",
         section_flights_desc: "Fill out the form below to find the best flight tickets.",
+        section_transport: "Transportation Services",
+        section_transport_desc: "We provide various modes of transportation for the comfort of your holiday.",
         label_origin: "Origin City",
         label_destination: "Destination City",
         label_date: "Departure Date",
@@ -134,6 +140,7 @@ const translations = {
         nav_accommodations: "فنادق وفيلات",
         nav_blog: "مدونة",
         nav_flights: "تذاكر طيران",
+        nav_transport: "وسائل النقل",
         nav_contact: "اتصل بنا",
 
         hero_badge: "خبير جولات وسفر",
@@ -154,6 +161,8 @@ const translations = {
 
         section_flights: "حجز تذاكر الطيران",
         section_flights_desc: "املأ النموذج أدناه للعثور على أفضل تذاكر الطيران.",
+        section_transport: "خدمات النقل",
+        section_transport_desc: "نحن نوفر وسائل نقل مختلفة لراحة عطلتك.",
         label_origin: "مدينة المغادرة",
         label_destination: "وجهة الوصول",
         label_date: "تاريخ المغادرة",

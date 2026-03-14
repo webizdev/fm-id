@@ -17,7 +17,7 @@ try {
 }
 
 // --- STATE & DATA ---
-let currentData = { destinations: [], accommodations: [], settings: [], blog: [], areas: [] };
+let currentData = { destinations: [], accommodations: [], settings: [], blog: [], areas: [], transport: [] };
 let activeView = 'destinations';
 
 // --- HELPER ---
@@ -41,7 +41,7 @@ window.openEditModal = function (id, targetGroup = null) {
 
         if (!item) {
             console.log('Searching in other groups...');
-            for (const g of ['destinations', 'accommodations', 'blog', 'areas']) {
+            for (const g of ['destinations', 'accommodations', 'blog', 'areas', 'transport']) {
                 if (currentData[g]) {
                     item = currentData[g].find(x => String(x.id) === String(id));
                     if (item) { group = g; break; }
@@ -59,6 +59,7 @@ window.openEditModal = function (id, targetGroup = null) {
             if (group === 'blog') modalTitle.innerText = 'Edit Artikel Blog';
             else if (group === 'destinations') modalTitle.innerText = 'Edit Destinasi';
             else if (group === 'accommodations') modalTitle.innerText = 'Edit Akomodasi';
+            else if (group === 'transport') modalTitle.innerText = 'Edit Transportasi';
             else modalTitle.innerText = 'Edit Area';
         }
 
@@ -75,6 +76,10 @@ window.openEditModal = function (id, targetGroup = null) {
         getEl('entry-type').value = item.type || '';
         getEl('entry-type-en').value = item.type_en || '';
         getEl('entry-type-ar').value = item.type_ar || '';
+
+        if (getEl('entry-transport-desc')) getEl('entry-transport-desc').value = item.description || '';
+        if (getEl('entry-transport-desc-en')) getEl('entry-transport-desc-en').value = item.description_en || '';
+        if (getEl('entry-transport-desc-ar')) getEl('entry-transport-desc-ar').value = item.description_ar || '';
 
         if (group === 'blog') {
             getEl('entry-category').value = item.category || 'Tips Travel';
@@ -93,6 +98,7 @@ window.openEditModal = function (id, targetGroup = null) {
         // --- DYNAMIC VISIBILITY & REQUIRED FLAGS ---
         const groupType = getEl('group-type');
         const groupBlog = getEl('group-blog-fields');
+        const groupTransportDesc = getEl('group-transport-desc');
         const priceInput = getEl('entry-price');
         const areaInput = getEl('entry-area');
         const imageInput = getEl('entry-image');
@@ -103,31 +109,35 @@ window.openEditModal = function (id, targetGroup = null) {
 
         const isArea = group === 'areas';
         const isBlog = group === 'blog';
+        const isTransport = group === 'transport';
 
         const isAccom = group === 'accommodations';
         const isDest = group === 'destinations';
 
         if (groupType) {
-            groupType.style.display = (isAccom || isDest) ? 'block' : 'none';
+            groupType.style.display = (isAccom || isDest || isTransport) ? 'block' : 'none';
             const typeLabel = getEl('label-type');
             if (typeLabel) {
-                typeLabel.innerText = isAccom ? 'Tipe Akomodasi' : 'Kategori Wisata';
+                if (isTransport) typeLabel.innerText = 'Tipe Armada / Kendaraan';
+                else typeLabel.innerText = isAccom ? 'Tipe Akomodasi' : 'Kategori Wisata';
             }
         }
+        if (groupTransportDesc) groupTransportDesc.style.display = isTransport ? 'block' : 'none';
         if (groupBlog) groupBlog.style.display = isBlog ? 'block' : 'none';
-        if (pField) pField.style.display = 'none';
-        if (aField) aField.style.display = (isBlog || isArea) ? 'none' : 'block';
+        if (pField) pField.style.display = isTransport ? 'block' : 'none';
+        if (aField) aField.style.display = (isBlog || isArea || isTransport) ? 'none' : 'block';
         if (iField) iField.style.display = isArea ? 'none' : 'block';
 
         // Toggle Required
         if (priceInput) priceInput.required = false;
-        if (areaInput) areaInput.required = !(isBlog || isArea);
+        if (areaInput) areaInput.required = !(isBlog || isArea || isTransport);
         if (imageInput) imageInput.required = !isArea;
 
         const nameLabel = document.querySelector('label[for="entry-name"]');
         if (nameLabel) {
             if (isBlog) nameLabel.innerText = 'Judul Artikel';
             else if (isArea) nameLabel.innerText = 'Nama Area Baru';
+            else if (isTransport) nameLabel.innerText = 'Nama Unit Transportasi';
             else nameLabel.innerText = 'Nama Tempat';
         }
 
@@ -147,6 +157,7 @@ window.deleteItem = async function (id) {
     if (activeView === 'destinations') table = 'fmidtour_destinasi';
     else if (activeView === 'accommodations') table = 'fmidtour_akomodasi';
     else if (activeView === 'areas') table = 'fmidtour_areas';
+    else if (activeView === 'transport') table = 'fmidtour_transportasi';
     else table = 'fmidtour_blog';
 
     try {
@@ -185,17 +196,22 @@ async function fetchData() {
         const { data: arData, error: arErr } = await _supabase.from('fmidtour_areas').select('*').order('name');
         if (arErr) throw arErr;
 
+        const { data: tData, error: tErr } = await _supabase.from('fmidtour_transportasi').select('*');
+        if (tErr) throw tErr;
+
         currentData.destinations = dData || [];
         currentData.accommodations = aData || [];
         currentData.settings = sData || [];
         currentData.blog = bData || [];
         currentData.areas = arData || [];
+        currentData.transport = tData || [];
 
         populateSettingsForms();
         populateAreaDropdowns();
         renderTable();
         renderBlogTable();
         renderAreasTable();
+        renderTransportTable();
         console.log("--- fetchData Completed ---");
 
     } catch (error) {
@@ -286,6 +302,32 @@ function renderAreasTable() {
     });
 }
 
+function renderTransportTable() {
+    const transportBody = getEl('transport-table-body');
+    if (!transportBody) return;
+    transportBody.innerHTML = '';
+    const items = currentData.transport || [];
+
+    if (items.length === 0) {
+        transportBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Tidak ada data transportasi.</td></tr>`;
+        return;
+    }
+
+    items.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><strong>${item.name}</strong><br><small style="color:#aaa;">${item.image || ''}</small></td>
+            <td>${item.type || '-'}</td>
+            <td>Rp ${(item.price || 0).toLocaleString('id-ID')}</td>
+            <td>
+                <button class="action-btn btn-edit" onclick="openEditModal('${item.id}', 'transport')"><i class="fas fa-edit"></i></button>
+                <button class="action-btn btn-delete" onclick="deleteItem('${item.id}')"><i class="fas fa-trash"></i></button>
+            </td>
+        `;
+        transportBody.appendChild(tr);
+    });
+}
+
 function populateAreaDropdowns() {
     const areaSelect = getEl('entry-area');
     if (!areaSelect) return;
@@ -342,7 +384,7 @@ function populateSettingsForms() {
 function updateViewDisplay() {
     const containers = [
         'table-container', 'pengaturan-container', 'hero-container',
-        'footer-container', 'blog-container', 'areas-container', 'btn-add-new'
+        'footer-container', 'blog-container', 'areas-container', 'transport-container', 'btn-add-new'
     ];
     containers.forEach(id => {
         const el = getEl(id);
@@ -350,13 +392,14 @@ function updateViewDisplay() {
     });
 
     const v = activeView;
-    if (v === 'destinations' || v === 'accommodations' || v === 'blog' || v === 'areas') {
-        const targetId = v === 'blog' ? 'blog-container' : (v === 'areas' ? 'areas-container' : 'table-container');
+    if (v === 'destinations' || v === 'accommodations' || v === 'blog' || v === 'areas' || v === 'transport') {
+        const targetId = v === 'blog' ? 'blog-container' : (v === 'areas' ? 'areas-container' : (v === 'transport' ? 'transport-container' : 'table-container'));
         if (getEl(targetId)) getEl(targetId).style.display = 'block';
         if (getEl('btn-add-new')) getEl('btn-add-new').style.display = 'inline-block';
 
         if (v === 'blog') renderBlogTable();
         else if (v === 'areas') renderAreasTable();
+        else if (v === 'transport') renderTransportTable();
         else renderTable();
     } else {
         const targetId = v + '-container';
@@ -374,7 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.nav-menu li').forEach(n => n.classList.remove('active'));
             item.classList.add('active');
             activeView = item.getAttribute('data-view');
-            const titles = { 'destinations': 'Destinasi', 'accommodations': 'Akomodasi', 'pengaturan': 'Pengaturan', 'hero': 'Hero', 'footer': 'Footer', 'blog': 'Blog', 'areas': 'Area Wisata' };
+            const titles = { 'destinations': 'Destinasi', 'accommodations': 'Akomodasi', 'pengaturan': 'Pengaturan', 'hero': 'Hero', 'footer': 'Footer', 'blog': 'Blog', 'areas': 'Area Wisata', 'transport': 'Layanan Transportasi' };
             if (getEl('page-title')) getEl('page-title').innerText = 'Kelola ' + (titles[activeView] || 'Data');
             updateViewDisplay();
         });
@@ -394,6 +437,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Visibility & Required Toggles
             const isArea = activeView === 'areas';
             const isBlog = activeView === 'blog';
+            const isTransport = activeView === 'transport';
 
             const priceInput = getEl('entry-price');
             const areaInput = getEl('entry-area');
@@ -425,7 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const nameLbl = document.querySelector('label[for="entry-name"]');
-            if (nameLbl) nameLbl.innerText = isBlog ? 'Judul Artikel' : (isArea ? 'Nama Area Baru' : 'Nama Tempat');
+            if (nameLbl) nameLbl.innerText = isBlog ? 'Judul Artikel' : (isArea ? 'Nama Area Baru' : (isTransport ? 'Nama Unit Transportasi' : 'Nama Tempat'));
 
             getEl('form-modal').style.display = 'flex';
         });
@@ -488,6 +532,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         name_en: getEl('entry-name-en').value,
                         name_ar: getEl('entry-name-ar').value
                     };
+                } else if (group === 'transport') {
+                    payload = {
+                        name: getEl('entry-name').value,
+                        name_en: getEl('entry-name-en').value,
+                        name_ar: getEl('entry-name-ar').value,
+                        type: getEl('entry-type').value,
+                        type_en: getEl('entry-type-en').value,
+                        type_ar: getEl('entry-type-ar').value,
+                        description: getEl('entry-transport-desc').value,
+                        description_en: getEl('entry-transport-desc-en').value,
+                        description_ar: getEl('entry-transport-desc-ar').value,
+                        price: parseInt(getEl('entry-price').value) || 0,
+                        image: url
+                    };
                 } else {
                     payload = {
                         name: getEl('entry-name').value,
@@ -504,7 +562,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
 
-                const tableMap = { 'destinations': 'fmidtour_destinasi', 'accommodations': 'fmidtour_akomodasi', 'blog': 'fmidtour_blog', 'areas': 'fmidtour_areas' };
+                const tableMap = { 'destinations': 'fmidtour_destinasi', 'accommodations': 'fmidtour_akomodasi', 'blog': 'fmidtour_blog', 'areas': 'fmidtour_areas', 'transport': 'fmidtour_transportasi' };
                 const table = tableMap[group];
 
                 const { error } = id ? await _supabase.from(table).update(payload).eq('id', id) : await _supabase.from(table).insert([payload]);
