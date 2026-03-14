@@ -124,7 +124,7 @@ window.openEditModal = function (id, targetGroup = null) {
         }
         if (groupTransportDesc) groupTransportDesc.style.display = isTransport ? 'block' : 'none';
         if (groupBlog) groupBlog.style.display = isBlog ? 'block' : 'none';
-        if (pField) pField.style.display = isTransport ? 'block' : 'none';
+        if (pField) pField.style.display = 'none';
         if (aField) aField.style.display = (isBlog || isArea || isTransport) ? 'none' : 'block';
         if (iField) iField.style.display = isArea ? 'none' : 'block';
 
@@ -318,7 +318,6 @@ function renderTransportTable() {
         tr.innerHTML = `
             <td><strong>${item.name}</strong><br><small style="color:#aaa;">${item.image || ''}</small></td>
             <td>${item.type || '-'}</td>
-            <td>Rp ${(item.price || 0).toLocaleString('id-ID')}</td>
             <td>
                 <button class="action-btn btn-edit" onclick="openEditModal('${item.id}', 'transport')"><i class="fas fa-edit"></i></button>
                 <button class="action-btn btn-delete" onclick="deleteItem('${item.id}')"><i class="fas fa-trash"></i></button>
