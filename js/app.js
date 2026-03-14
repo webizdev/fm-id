@@ -117,7 +117,10 @@ async function fetchData() {
         renderGrid(allDestinations, destGrid, 'destination', initialLimit);
         renderGrid(allAccommodations, accomGrid, 'accommodation', initialLimit);
         renderBlogGrid(blogData || []);
-        renderTransportGrid();
+        
+        // Transport limit: 3 on mobile, 4 on desktop
+        const transportLimit = window.innerWidth < 768 ? 3 : 4;
+        renderTransportGrid(transportLimit);
 
     } catch (error) {
         console.error('Error fetching data from Supabase:', error);
@@ -415,7 +418,7 @@ function renderBlogGrid(data) {
     }
 }
 
-function renderTransportGrid() {
+function renderTransportGrid(limit = null) {
     const transportGrid = document.getElementById('transport-grid');
     if (!transportGrid) return;
     transportGrid.innerHTML = '';
@@ -426,7 +429,12 @@ function renderTransportGrid() {
         return;
     }
 
-    allTransport.forEach(item => {
+    let displayData = allTransport;
+    if (limit && displayData.length > limit) {
+        displayData = displayData.slice(0, limit);
+    }
+
+    displayData.forEach(item => {
         const title = lang === 'en' ? (item.name_en || item.name) : (lang === 'ar' ? (item.name_ar || item.name) : item.name);
         const typeRaw = lang === 'en' ? (item.type_en || item.type) : (lang === 'ar' ? (item.type_ar || item.type) : item.type);
         const description = lang === 'en' ? (item.description_en || item.description) : (lang === 'ar' ? (item.description_ar || item.description) : item.description);
@@ -448,6 +456,23 @@ function renderTransportGrid() {
         `;
         transportGrid.insertAdjacentHTML('beforeend', cardHTML);
     });
+
+    // Add See More button if limited
+    if (limit && allTransport.length > limit) {
+        const btnSeeAll = translations[lang] ? translations[lang].btn_see_more : "Lihat Selengkapnya";
+        const btnId = 'btn-more-transport';
+        
+        const btnWrapper = `
+            <div style="grid-column: 1/-1; text-align: center; margin-top: 2rem;">
+                <button id="${btnId}" class="btn-primary" style="padding: 0.8rem 2rem; border-radius: 50px;">${btnSeeAll} <i class="fas fa-chevron-down"></i></button>
+            </div>
+        `;
+        transportGrid.insertAdjacentHTML('beforeend', btnWrapper);
+
+        document.getElementById(btnId).addEventListener('click', () => {
+            renderTransportGrid(null); // Render all
+        });
+    }
 }
 
 // --- FILTERING ---
